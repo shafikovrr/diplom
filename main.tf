@@ -202,5 +202,3 @@ resource "yandex_alb_virtual_host" "my-virtual-host" {
   #    security_profile_id = "enprviu6hrlnjohfth0h"
   #  }
 }
-
-ghdshbsljasldkbsa
