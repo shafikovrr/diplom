@@ -1,0 +1,20 @@
+#cloud-config
+users:
+  - name: adrin
+    groups: sudo
+    shell: /bin/bash
+    sudo: ['ALL=(ALL) NOPASSWD:ALL']
+    ssh-authorized-keys:
+      - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPsvLKExCLFSG6M7aBMN6OQCUvzULJ3ekRJH0G8wVEBC adrin@terraform
+disable_root: true
+timezone: Asia/Yekaterinburg
+repo_update: true
+repo_upgrade: true
+apt:
+  preserve_sources_list: true
+packages:
+  - nginx
+runcmd:
+  - [ systemctl, nginx-reload ]
+  - [ systemctl, enable, nginx.service ]
+  - [ systemctl, start, --no-block, nginx.service ]
