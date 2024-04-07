@@ -202,26 +202,3 @@ resource "yandex_alb_virtual_host" "my-virtual-host" {
   #    security_profile_id = "enprviu6hrlnjohfth0h"
   #  }
 }
-
-resource "yandex_lb_network_load_balancer" "load-balancer-1" {
-  name                = "load-balancer-1"
-  deletion_protection = "false"
-  listener {
-    name = "my-listener"
-    port = 80
-    external_address_spec {
-      ip_version = "ipv4"
-    }
-  }
-
-  attached_target_group {
-    target_group_id = yandex_alb_http_router.tf-router.id
-    healthcheck {
-      name = "http"
-      http_options {
-        port = 80
-        path = "/"
-      }
-    }
-  }
-}
