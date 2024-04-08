@@ -1,3 +1,4 @@
+#######
 # Настройка дисков
 resource "yandex_compute_disk" "boot-disk-vm-1" {
   name        = "disk-vm-1"
