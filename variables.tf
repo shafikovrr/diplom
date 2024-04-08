@@ -13,15 +13,18 @@ variable "folder_id" {
   sensitive = true
 }
 
-#variable "zone_1" {
-#  type = string
-#}
+variable "zone_1" {
+  type = string
+}
 
-#variable "zone_2" {
-#  type = string
-#}
+variable "zone_2" {
+  type = string
+}
 
 variable "image_id" {
   type = string
 }
 
+variable "platform" {
+  type = string
+}
