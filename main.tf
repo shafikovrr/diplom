@@ -165,10 +165,10 @@ resource "yandex_alb_backend_group" "backend-group" {
 # https://yandex.cloud/ru/docs/application-load-balancer/operations/http-router-create
 resource "yandex_alb_http_router" "tf-router" {
   name = "wh-http-router"
-  labels = {
-    tf-label    = "tf-label-value"
-    empty-label = ""
-  }
+#  labels = {
+#    tf-label    = "tf-label-value"
+#    empty-label = ""
+#  }
 }
 
 resource "yandex_alb_virtual_host" "my-virtual-host" {
