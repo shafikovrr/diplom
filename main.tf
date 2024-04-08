@@ -150,6 +150,7 @@ resource "yandex_alb_backend_group" "backend-group" {
     }
 
     healthcheck {
+      healthcheck_port    = 80 #https://terraform-provider.yandexcloud.net/Resources/alb_backend_group
       timeout             = "10s"
       interval            = "2s"
       healthy_threshold   = 10
@@ -175,14 +176,16 @@ resource "yandex_alb_virtual_host" "my-virtual-host" {
   http_router_id = yandex_alb_http_router.tf-router.id
   route {
     name = "wh-router"
-    http_route { #как настроить /? 
+    http_route { #как настроить /? https://terraform-provider.yandexcloud.net/Resources/alb_virtual_host / по умолчанию если не задано
+      http_match {
+        path {
+          prefix = "/"
+        }
+      }
       http_route_action {
         backend_group_id = yandex_alb_backend_group.backend-group.id
         timeout          = "60s"
       }
     }
   }
-  #  route_options {
-  #    security_profile_id = "enprviu6hrlnjohfth0h"
-  #  }
 }
