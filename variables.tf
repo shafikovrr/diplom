@@ -13,11 +13,11 @@ variable "folder_id" {
   sensitive = true
 }
 
-variable "zone_1" {
+variable "zone_a" {
   type = string
 }
 
-variable "zone_2" {
+variable "zone_b" {
   type = string
 }
 

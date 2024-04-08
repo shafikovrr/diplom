@@ -4,7 +4,7 @@ resource "yandex_compute_disk" "boot-disk-vm-1" {
   name        = "disk-vm-1"
   description = "диск для веб-сервера 1"
   type        = "network-hdd"
-  zone        = var.zone_1
+  zone        = var.zone_a
   size        = 10
   image_id    = var.image_id
 }
@@ -13,7 +13,7 @@ resource "yandex_compute_disk" "boot-disk-vm-2" {
   name        = "disk-vm-2"
   description = "диск для веб-сервера 2"
   type        = "network-hdd"
-  zone        = var.zone_2
+  zone        = var.zone_b
   size        = 10
   image_id    = var.image_id
 }
@@ -24,7 +24,7 @@ resource "yandex_compute_instance" "vm-1" {
   name        = "vm-1"
   description = "веб-сервер 1"
   hostname    = "vm-1"
-  zone        = var.zone_1
+  zone        = var.zone_a
   platform_id = var.platform
   resources {
     cores         = 2
@@ -50,7 +50,7 @@ resource "yandex_compute_instance" "vm-2" {
   name        = "vm-2"
   description = "веб-сервер 2"
   hostname    = "vm-2"
-  zone        = var.zone_2
+  zone        = var.zone_b
   platform_id = var.platform
   resources {
     cores         = 2
@@ -80,13 +80,13 @@ resource "yandex_vpc_network" "network" {
 }
 resource "yandex_vpc_subnet" "subnet-a" {
   name           = "subnet1"
-  zone           = "ru-central1-a"
+  zone           = var.zone_a
   network_id     = yandex_vpc_network.network.id
   v4_cidr_blocks = ["192.168.10.0/24"]
 }
 resource "yandex_vpc_subnet" "subnet-b" {
   name           = "subnet2"
-  zone           = "ru-central1-b"
+  zone           = var.zone_b
   network_id     = yandex_vpc_network.network.id
   v4_cidr_blocks = ["192.168.11.0/24"]
 }
