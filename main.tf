@@ -109,28 +109,22 @@ output "external_ip_address_vm_2" {
 
 
 #################################################################################################
-
 # target-group https://yandex.cloud/ru/docs/application-load-balancer/operations/target-group-create#tf_1
 # посмотреть https://console.yandex.cloud/folders/b1gltt4aeqoofm7e2pnj/application-load-balancer/target-groups
 
 resource "yandex_alb_target_group" "nginx-group" {
   name = "nginx-group"
-
   target {
     subnet_id  = yandex_vpc_subnet.subnet-a.id
     ip_address = yandex_compute_instance.vm-1.network_interface.0.ip_address
   }
-
   target {
     subnet_id  = yandex_vpc_subnet.subnet-b.id
     ip_address = yandex_compute_instance.vm-2.network_interface.0.ip_address
   }
 }
 
-
-
 ################################################################################################
-
 # https://yandex.cloud/ru/docs/application-load-balancer/operations/backend-group-create
 resource "yandex_alb_backend_group" "backend-group" {
   name = "web-hosts"
@@ -139,7 +133,6 @@ resource "yandex_alb_backend_group" "backend-group" {
       source_ip = true
     }
   }
-
   http_backend {
     name             = "web"
     weight           = 1
@@ -148,7 +141,6 @@ resource "yandex_alb_backend_group" "backend-group" {
     load_balancing_config {
       panic_threshold = 90
     }
-
     healthcheck {
       healthcheck_port    = 80 #https://terraform-provider.yandexcloud.net/Resources/alb_backend_group
       timeout             = "10s"
@@ -165,12 +157,7 @@ resource "yandex_alb_backend_group" "backend-group" {
 # https://yandex.cloud/ru/docs/application-load-balancer/operations/http-router-create
 resource "yandex_alb_http_router" "tf-router" {
   name = "wh-http-router"
-#  labels = {
-#    tf-label    = "tf-label-value"
-#    empty-label = ""
-#  }
 }
-
 resource "yandex_alb_virtual_host" "my-virtual-host" {
   name           = "wh-virtual"
   http_router_id = yandex_alb_http_router.tf-router.id
