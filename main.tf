@@ -175,3 +175,35 @@ resource "yandex_alb_virtual_host" "virtual-host" {
     }
   }
 }
+
+################################################################################################
+# https://yandex.cloud/ru/docs/application-load-balancer/operations/backend-group-create
+################################################################################################
+resource "yandex_alb_backend_group" "backend-group" {
+  name = "web-hosts"
+  session_affinity {
+    connection {
+      source_ip = true
+    }
+  }
+
+  http_backend {
+    name             = "web"
+    weight           = 1
+    port             = 80
+    target_group_ids = ["${yandex_alb_target_group.nginx-group.id}"]
+    load_balancing_config {
+      panic_threshold = 90
+    }
+
+    healthcheck {
+      timeout             = "10s"
+      interval            = "2s"
+      healthy_threshold   = 10
+      unhealthy_threshold = 15
+      http_healthcheck {
+        path = "/"
+      }
+    }
+  }
+}

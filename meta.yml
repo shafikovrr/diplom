@@ -3,9 +3,10 @@ users:
   - name: adrin
     groups: sudo
     shell: /bin/bash
-    sudo: ['ALL=(ALL) NOPASSWD:ALL']
+    sudo: 'ALL=(ALL) NOPASSWD:ALL'
     ssh-authorized-keys:
-      - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPPrYUdwpUlm1duxv2ttHChI6tbm6x6EAhXImMJth/eD adrin@terraform
+      - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGaK2I6MIx3HRbWftHIIx03XlOM66826iBnuAYs2b56s adrin@terraform
+disable_root: true
 timezone: Asia/Yekaterinburg
 repo_update: true
 repo_upgrade: true
