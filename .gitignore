@@ -12,3 +12,5 @@ terraform.tfvars
 id_web_hosts
 id_web_hosts.pub
 .gitignore
+id_web_host
+id_web_host.pub
