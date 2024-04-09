@@ -180,14 +180,18 @@ resource "yandex_alb_virtual_host" "virtual-host" {
 #https://yandex.cloud/ru/docs/application-load-balancer/operations/application-load-balancer-create
 ##################################################################################################
 resource "yandex_alb_load_balancer" "web-hosts-balancer" {
-  name        = "web-hosts-balancer>"
-  network_id  = yandex_vpc_network.network.id
+  name       = "web-hosts-balancer>"
+  network_id = yandex_vpc_network.network.id
   #security_group_ids = ["<список_идентификаторов_групп_безопасности>"]
 
   allocation_policy {
     location {
       zone_id   = var.zone_a
-      subnet_id = "??????????????????//" 
+      subnet_id = yandex_vpc_subnet.subnet-a.id
+    }
+    location {
+      zone_id   = var.zone_b
+      subnet_id = yandex_vpc_subnet.subnet-b.id
     }
   }
 
@@ -198,7 +202,7 @@ resource "yandex_alb_load_balancer" "web-hosts-balancer" {
         external_ipv4_address {
         }
       }
-      ports = [ 80 ]
+      ports = [80]
     }
     http {
       handler {
@@ -207,13 +211,13 @@ resource "yandex_alb_load_balancer" "web-hosts-balancer" {
     }
   }
 
-  log_options {
-    log_group_id = "<идентификатор_лог-группы>"
-    discard_rule {
-      http_codes          = ["<HTTP-код>"]
-      http_code_intervals = ["<класс_HTTP-кодов>"]
-      grpc_codes          = ["<gRPC-код>"]
-      discard_percent     = <доля_отбрасываемых_логов>
-    }
-  }
+  #log_options {
+  #  log_group_id = "<идентификатор_лог-группы>"
+  #  discard_rule {
+  #    http_codes          = ["<HTTP-код>"]
+  #    http_code_intervals = ["<класс_HTTP-кодов>"]
+  #    grpc_codes          = ["<gRPC-код>"]
+  #    discard_percent     = <доля_отбрасываемых_логов>
+  #  }
+  #}
 }
