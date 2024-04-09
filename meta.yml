@@ -5,8 +5,7 @@ users:
     shell: /bin/bash
     sudo: ['ALL=(ALL) NOPASSWD:ALL']
     ssh-authorized-keys:
-      - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPsvLKExCLFSG6M7aBMN6OQCUvzULJ3ekRJH0G8wVEBC adrin@terraform
-disable_root: true
+      - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPPrYUdwpUlm1duxv2ttHChI6tbm6x6EAhXImMJth/eD adrin@terraform
 timezone: Asia/Yekaterinburg
 repo_update: true
 repo_upgrade: true
