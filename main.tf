@@ -180,7 +180,7 @@ resource "yandex_alb_virtual_host" "virtual-host" {
 #https://yandex.cloud/ru/docs/application-load-balancer/operations/application-load-balancer-create
 ##################################################################################################
 resource "yandex_alb_load_balancer" "web-hosts-balancer" {
-  name       = "web-hosts-balancer>"
+  name       = "web-hosts-balancer"
   network_id = yandex_vpc_network.network.id
   #security_group_ids = ["<список_идентификаторов_групп_безопасности>"]
 
