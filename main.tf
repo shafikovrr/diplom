@@ -176,34 +176,44 @@ resource "yandex_alb_virtual_host" "virtual-host" {
   }
 }
 
-################################################################################################
-# https://yandex.cloud/ru/docs/application-load-balancer/operations/backend-group-create
-################################################################################################
-resource "yandex_alb_backend_group" "backend-group" {
-  name = "web-hosts"
-  session_affinity {
-    connection {
-      source_ip = true
+##################################################################################################
+#https://yandex.cloud/ru/docs/application-load-balancer/operations/application-load-balancer-create
+##################################################################################################
+resource "yandex_alb_load_balancer" "web-hosts-balancer" {
+  name        = "web-hosts-balancer>"
+  network_id  = yandex_vpc_network.network.id
+  #security_group_ids = ["<список_идентификаторов_групп_безопасности>"]
+
+  allocation_policy {
+    location {
+      zone_id   = var.zone_a
+      subnet_id = "??????????????????//" 
     }
   }
 
-  http_backend {
-    name             = "web"
-    weight           = 1
-    port             = 80
-    target_group_ids = ["${yandex_alb_target_group.nginx-group.id}"]
-    load_balancing_config {
-      panic_threshold = 90
-    }
-
-    healthcheck {
-      timeout             = "10s"
-      interval            = "2s"
-      healthy_threshold   = 10
-      unhealthy_threshold = 15
-      http_healthcheck {
-        path = "/"
+  listener {
+    name = "web-hosts-listener"
+    endpoint {
+      address {
+        external_ipv4_address {
+        }
       }
+      ports = [ 80 ]
+    }
+    http {
+      handler {
+        http_router_id = yandex_alb_http_router.tf-router.id
+      }
+    }
+  }
+
+  log_options {
+    log_group_id = "<идентификатор_лог-группы>"
+    discard_rule {
+      http_codes          = ["<HTTP-код>"]
+      http_code_intervals = ["<класс_HTTP-кодов>"]
+      grpc_codes          = ["<gRPC-код>"]
+      discard_percent     = <доля_отбрасываемых_логов>
     }
   }
 }
