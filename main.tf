@@ -206,6 +206,4 @@ resource "yandex_alb_load_balancer" "web-hosts-balancer" {
   #}
 }
 
-
-
 #https://github.com/yandex-cloud-examples/yc-website-high-availability-with-alb/blob/main/application-load-balancer-website.tf
