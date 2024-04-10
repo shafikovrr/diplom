@@ -206,4 +206,13 @@ resource "yandex_alb_load_balancer" "web-hosts-balancer" {
   #}
 }
 
+
+#data "yandex_alb_load_balancer" "tf-alb" {
+#  load_balancer_id = "<идентификатор_балансировщика>"
+#}
+
+#output "tf-alb-listener" {
+#  value = data.yandex_alb_load_balancer.tf-alb.allocation_policy
+#}
+
 #https://github.com/yandex-cloud-examples/yc-website-high-availability-with-alb/blob/main/application-load-balancer-website.tf
