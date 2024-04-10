@@ -18,3 +18,4 @@ runcmd:
   - [ systemctl, nginx-reload ]
   - [ systemctl, enable, nginx.service ]
   - [ systemctl, start, --no-block, nginx.service ]
+  - [ sh, -c, "echo $(hostname | cut -d '.' -f 1 ) >> /var/www/html/index.html" ]

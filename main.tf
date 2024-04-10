@@ -88,22 +88,6 @@ resource "yandex_vpc_subnet" "subnet-b" {
   network_id     = yandex_vpc_network.network.id
   v4_cidr_blocks = ["192.168.11.0/24"]
 }
-##############################################
-# Вывод полученных ip (внутренних и внешних) #
-##############################################
-
-output "internal_ip_address_web-host_1" {
-  value = yandex_compute_instance.web-host-1.network_interface.0.ip_address
-}
-output "internal_ip_address_web-host_2" {
-  value = yandex_compute_instance.web-host-2.network_interface.0.ip_address
-}
-output "external_ip_address_web-host_1" {
-  value = yandex_compute_instance.web-host-1.network_interface.0.nat_ip_address
-}
-output "external_ip_address_web-host_2" {
-  value = yandex_compute_instance.web-host-2.network_interface.0.nat_ip_address
-}
 
 #################################################################################################
 # target-group https://yandex.cloud/ru/docs/application-load-balancer/operations/target-group-create#tf_1
@@ -221,3 +205,7 @@ resource "yandex_alb_load_balancer" "web-hosts-balancer" {
   #  }
   #}
 }
+
+
+
+#https://github.com/yandex-cloud-examples/yc-website-high-availability-with-alb/blob/main/application-load-balancer-website.tf
