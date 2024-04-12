@@ -28,3 +28,9 @@ variable "image_id" {
 variable "platform" {
   type = string
 }
+
+#variable "service_account_key_file" {
+#  description = "Service account key file"
+#  type        = string
+#  default     = "/home/adrin/.ssh/authorized_key.json"
+#}
