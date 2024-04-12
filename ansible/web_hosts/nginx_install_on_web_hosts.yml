@@ -1,0 +1,8 @@
+---
+- name: "Install nginx and congigure"
+  hosts: web_servers
+  gather_facts: yes
+  roles:
+  - include_role:
+    name: nginx
+    tasks_from: main

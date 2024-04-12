@@ -1,0 +1,20 @@
+---
+# tasks file for nginx
+
+# 1. Установить веб-сервер nginx на web_host_1 и web_host_2.
+- name: Install nginx (state=present is optional)
+  become: yes
+  ansible.builtin.apt:
+    name: nginx
+    state: present
+
+# 2.
+
+- name: "Add Index page"
+  become: yes
+  template:
+    src: "index.html.j2"
+    dest: "/var/www/html/index.html"
+    owner: root
+    group: root
+    mode: 0755
