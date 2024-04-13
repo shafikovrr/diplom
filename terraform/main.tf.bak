@@ -16,35 +16,9 @@ resource "yandex_compute_disk" "boot-disk-web-host-2" {
   size        = 10
   image_id    = var.image_id
 }
-resource "yandex_compute_disk" "zabbix" {
-  name        = "zabbix"
-  description = "диск для zabbix"
-  type        = "network-hdd"
-  zone        = var.zone_b
-  size        = 10
-  image_id    = var.image_id
-}
-resource "yandex_compute_disk" "elasticsearch" {
-  name        = "elasticsearch"
-  description = "диск для elasticsearch"
-  type        = "network-hdd"
-  zone        = var.zone_a
-  size        = 10
-  image_id    = var.image_id
-}
-resource "yandex_compute_disk" "kibana" {
-  name        = "kibana"
-  description = "диск для kibana"
-  type        = "network-hdd"
-  zone        = var.zone_b
-  size        = 10
-  image_id    = var.image_id
-}
 
 # Настройка хостов
-
 ## Веб-сервера
-
 resource "yandex_compute_instance" "web-host-1" {
   name        = "web-host-1"
   description = "веб-сервер 1"
@@ -96,98 +70,12 @@ resource "yandex_compute_instance" "web-host-2" {
   }
 }
 
-# elasticsearch
-
-resource "yandex_compute_instance" "elasticsearch" {
-  name        = "elasticsearch"
-  description = "host elasticsearch"
-  hostname    = "elasticsearch"
-  zone        = var.zone_a
-  platform_id = var.platform
-  resources {
-    cores         = 2
-    core_fraction = 20
-    memory        = 2
-  }
-  boot_disk {
-    disk_id = yandex_compute_disk.elasticsearch.id
-  }
-  network_interface {
-    subnet_id = yandex_vpc_subnet.subnet-a.id
-    nat       = true
-  }
-  metadata = {
-    user-data = "${file("./meta.yml")}"
-  }
-  scheduling_policy {
-    preemptible = true
-  }
-}
-
-# zabbix
-
-resource "yandex_compute_instance" "zabbix" {
-  name        = "zabbix"
-  description = "host zabbix"
-  hostname    = "zabbix"
-  zone        = var.zone_b
-  platform_id = var.platform
-  resources {
-    cores         = 2
-    core_fraction = 20
-    memory        = 2
-  }
-  boot_disk {
-    disk_id = yandex_compute_disk.zabbix.id
-  }
-  network_interface {
-    subnet_id = yandex_vpc_subnet.subnet-b.id
-    nat       = true
-  }
-  metadata = {
-    user-data = "${file("./meta.yml")}"
-  }
-  scheduling_policy {
-    preemptible = true
-  }
-}
-
-# kibana
-
-resource "yandex_compute_instance" "kibana" {
-  name        = "kibana"
-  description = "host kibanah"
-  hostname    = "kibana"
-  zone        = var.zone_b
-  platform_id = var.platform
-  resources {
-    cores         = 2
-    core_fraction = 20
-    memory        = 2
-  }
-  boot_disk {
-    disk_id = yandex_compute_disk.kibana.id
-  }
-  network_interface {
-    subnet_id = yandex_vpc_subnet.subnet-b.id
-    nat       = true
-  }
-  metadata = {
-    user-data = "${file("./meta.yml")}"
-  }
-  scheduling_policy {
-    preemptible = true
-  }
-}
-
-# vpc
-
+######################################################################################################
+# настройка сети в разных зонах и подсетях https://yandex.cloud/ru/docs/vpc/operations/subnet-create #
+######################################################################################################
 resource "yandex_vpc_network" "network" {
   name = "network"
 }
-
-# vpc_subnet
-
 resource "yandex_vpc_subnet" "subnet-a" {
   name           = "subnet1"
   zone           = var.zone_a
@@ -202,7 +90,10 @@ resource "yandex_vpc_subnet" "subnet-b" {
 }
 
 
-# target-group
+#################################################################################################
+# target-group https://yandex.cloud/ru/docs/application-load-balancer/operations/target-group-create#tf_1
+# посмотреть https://console.yandex.cloud/folders/b1gltt4aeqoofm7e2pnj/application-load-balancer/target-groups
+#######################################################################################################
 resource "yandex_alb_target_group" "web-hosts-group" {
   name = "web-hosts-group"
   target {
@@ -215,7 +106,9 @@ resource "yandex_alb_target_group" "web-hosts-group" {
   }
 }
 
-# backend-group
+################################################################################################
+# https://yandex.cloud/ru/docs/application-load-balancer/operations/backend-group-create
+##################################################################################################
 resource "yandex_alb_backend_group" "backend-group" {
   name = "web-hosts-backend-group"
   session_affinity {
@@ -232,7 +125,7 @@ resource "yandex_alb_backend_group" "backend-group" {
       panic_threshold = 90
     }
     healthcheck {
-      healthcheck_port    = 80
+      healthcheck_port    = 80 #https://terraform-provider.yandexcloud.net/Resources/alb_backend_group
       timeout             = "10s"
       interval            = "2s"
       healthy_threshold   = 10
@@ -243,8 +136,9 @@ resource "yandex_alb_backend_group" "backend-group" {
     }
   }
 }
-
-# http-router
+###################################################################################################
+# https://yandex.cloud/ru/docs/application-load-balancer/operations/http-router-create
+################################################################################################
 resource "yandex_alb_http_router" "tf-router" {
   name = "web-hosts-http-router"
 }
@@ -253,7 +147,7 @@ resource "yandex_alb_virtual_host" "virtual-host" {
   http_router_id = yandex_alb_http_router.tf-router.id
   route {
     name = "web-hosts-route"
-    http_route {
+    http_route { #как настроить /? https://terraform-provider.yandexcloud.net/Resources/alb_virtual_host / по умолчанию если не задано
       http_match {
         path {
           prefix = "/"
@@ -267,10 +161,13 @@ resource "yandex_alb_virtual_host" "virtual-host" {
   }
 }
 
-# load-balancer
+##################################################################################################
+#https://yandex.cloud/ru/docs/application-load-balancer/operations/application-load-balancer-create
+##################################################################################################
 resource "yandex_alb_load_balancer" "web-hosts-balancer" {
   name       = "web-hosts-balancer"
   network_id = yandex_vpc_network.network.id
+  #security_group_ids = ["<список_идентификаторов_групп_безопасности>"]
 
   allocation_policy {
     location {
@@ -282,6 +179,7 @@ resource "yandex_alb_load_balancer" "web-hosts-balancer" {
       subnet_id = yandex_vpc_subnet.subnet-b.id
     }
   }
+
   listener {
     name = "web-hosts-listener"
     endpoint {
@@ -297,4 +195,25 @@ resource "yandex_alb_load_balancer" "web-hosts-balancer" {
       }
     }
   }
+
+  #log_options {
+  #  log_group_id = "<идентификатор_лог-группы>"
+  #  discard_rule {
+  #    http_codes          = ["<HTTP-код>"]
+  #    http_code_intervals = ["<класс_HTTP-кодов>"]
+  #    grpc_codes          = ["<gRPC-код>"]
+  #    discard_percent     = <доля_отбрасываемых_логов>
+  #  }
+  #}
 }
+
+
+#data "yandex_alb_load_balancer" "tf-alb" {
+#  load_balancer_id = "<идентификатор_балансировщика>"
+#}
+
+#output "tf-alb-listener" {
+#  value = data.yandex_alb_load_balancer.tf-alb.allocation_policy
+#}
+
+#https://github.com/yandex-cloud-examples/yc-website-high-availability-with-alb/blob/main/application-load-balancer-website.tf
