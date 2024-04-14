@@ -7,7 +7,7 @@ terraform {
   required_version = ">= 0.13"
 }
 
-#https://registry.terraform.io/providers/yandex-cloud/yandex/latest/docs
+# https://registry.terraform.io/providers/yandex-cloud/yandex/latest/docs
 
 provider "yandex" {
   token     = var.oauth_token

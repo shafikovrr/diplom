@@ -1,6 +1,6 @@
 ---
 - name: "Install nginx and congigure"
-  hosts: web_servers
+  hosts: webservers
   gather_facts: yes
   roles:
   - include_role:

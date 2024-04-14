@@ -29,6 +29,14 @@ variable "platform" {
   type = string
 }
 
+variable "ssh_user" {
+  type = string
+}
+
+variable "ssh_folder" {
+  type = string
+}
+
 #variable "service_account_key_file" {
 #  description = "Service account key file"
 #  type        = string
