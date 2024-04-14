@@ -21,16 +21,54 @@
 
 # 3. Рестарт и enabled
 
-- name: "Restart nginx"
-  become: yes
-  service:
-    name: nginx
-    state: restarted
-    enabled: yes
+#- name: "Restart nginx"
+#  become: yes
+#  service:
+#    name: nginx
+#    state: restarted
+#    enabled: yes
 
 # 4. Проверка доступности порта 80
 
-- name: "Wait for port 80 to become open on the host, don't start checking for 5 seconds"
-  wait_for:
-    port: 80
-    delay: 5
+#- name: "Wait for port 80 to become open on the host, don't start checking for 5 seconds"
+#  wait_for:
+#    port: 80
+#    delay: 5
+
+# 5. Установка zabbix-agent
+
+- name: "Install zabbix-agent"
+  become: yes
+  ansible.builtin.apt:
+    name: zabbix-agent
+    state: present
+
+# 6. Рестарт и enabled zabbix-agent
+
+#- name: "Restart zabbix-agent"
+#  become: yes
+#  service:
+#    name: zabbix-agent
+#    state: restarted
+#    enabled: yes
+
+# 7. Установка filebeat
+
+- name: Download filebeat
+  become: yes
+  apt: deb=https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-8.13.2-amd64.deb state=present
+  
+#- name: "Install filebeat"
+#  become: yes
+#  ansible.builtin.apt:
+#    name: /home/adrin/filebeat-8.13.2-amd64.deb
+#    state: present
+
+# 6. Рестарт и enabled filebeat
+
+- name: "Restart filebeat"
+  become: yes
+  service:
+    name: filebeat
+    state: restarted
+    enabled: yes

@@ -40,3 +40,11 @@ resource "yandex_compute_disk" "kibana" {
   size        = 10
   image_id    = var.image_id
 }
+resource "yandex_compute_disk" "bastion" {
+  name        = "bastion"
+  description = "диск для bastion"
+  type        = "network-hdd"
+  zone        = var.zone_d
+  size        = 10
+  image_id    = var.image_id
+}

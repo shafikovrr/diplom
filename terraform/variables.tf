@@ -21,6 +21,10 @@ variable "zone_b" {
   type = string
 }
 
+variable "zone_d" {
+  type = string
+}
+
 variable "image_id" {
   type = string
 }

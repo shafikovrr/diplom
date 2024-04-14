@@ -138,4 +138,30 @@ resource "yandex_compute_instance" "kibana" {
   }
 }
 
+#bastion
 
+resource "yandex_compute_instance" "bastion" {
+  name        = "bastion"
+  description = "host bastion"
+  hostname    = "bastion"
+  zone        = var.zone_d
+  platform_id = var.platform
+  resources {
+    cores         = 2
+    core_fraction = 20
+    memory        = 2
+  }
+  boot_disk {
+    disk_id = yandex_compute_disk.bastion.id
+  }
+  network_interface {
+    subnet_id = yandex_vpc_subnet.subnet-d.id
+    nat       = true
+  }
+  metadata = {
+    user-data = "${file("./meta.yml")}"
+  }
+  scheduling_policy {
+    preemptible = true
+  }
+}
