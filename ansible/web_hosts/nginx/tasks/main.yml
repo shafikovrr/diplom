@@ -2,13 +2,16 @@
 # tasks file for nginx
 
 # 1. Установить веб-сервер nginx на web_host_1 и web_host_2.
+# https://docs.ansible.com/ansible/latest/collections/ansible/builtin/apt_module.html
+
 - name: Install nginx (state=present is optional)
   become: yes
   ansible.builtin.apt:
     name: nginx
     state: present
 
-# 2.
+# 2. Добавление index.html
+# https://docs.ansible.com/ansible/latest/collections/ansible/builtin/template_module.html
 
 - name: "Add Index page"
   become: yes
@@ -17,18 +20,20 @@
     dest: "/var/www/html/index.html"
     owner: root
     group: root
-    mode: 0755
+    mode: '0644' # 0755
 
 # 3. Рестарт и enabled
+# https://docs.ansible.com/ansible/latest/collections/ansible/builtin/service_module.html
 
 - name: "Restart nginx"
   become: yes
-  service:
+  ansible.builtin.service:
     name: nginx
     state: restarted
     enabled: yes
 
 # 4. Проверка доступности порта 80
+# https://docs.ansible.com/ansible/latest/collections/ansible/builtin/wait_for_module.html
 
 - name: "Wait for port 80 to become open on the host, don't start checking for 5 seconds"
   wait_for:

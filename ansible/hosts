@@ -1,0 +1,32 @@
+[all:children]
+webservers
+elasticsearch
+zabbix
+kibana
+bastion
+
+[webservers:children]
+web_host_1
+web_host_2
+
+[web_host_1]
+158.160.97.4 ansible_ssh_user=adrin ansible_ssh_private_key_file=~/.ssh/id_web_host
+
+[web_host_2]
+158.160.76.75 ansible_ssh_user=adrin ansible_ssh_private_key_file=~/.ssh/id_web_host
+
+[elasticsearch]
+158.160.102.202 ansible_ssh_user=adrin ansible_ssh_private_key_file=~/.ssh/id_web_host
+
+[zabbix]
+158.160.89.32 ansible_ssh_user=adrin ansible_ssh_private_key_file=~/.ssh/id_web_host
+
+[kibana]
+51.250.16.235 ansible_ssh_user=adrin ansible_ssh_private_key_file=~/.ssh/id_web_host
+
+[bastion]
+158.160.162.217 ansible_ssh_user=adrin ansible_ssh_private_key_file=~/.ssh/id_web_host
+
+[load_balancer_address]
+158.160.145.162
+

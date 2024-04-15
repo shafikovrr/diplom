@@ -1,0 +1,11 @@
+---
+- name: "Install zabbix and congigure"
+  hosts: zabbix
+  gather_facts: yes
+  roles:
+  - include_role:
+    name: zabbix
+    tasks_from: main
+
+
+

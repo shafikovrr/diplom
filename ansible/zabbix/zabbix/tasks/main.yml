@@ -1,0 +1,68 @@
+---
+
+# sudo apt update && sudo apt upgrade
+
+- name: Run the equivalent of "apt-get update" as a separate step
+  become: yes
+  ansible.builtin.apt:
+    update_cache: yes
+
+- name: Upgrade the OS (apt-get dist-upgrade)
+  become: yes
+  ansible.builtin.apt:
+    upgrade: dist   
+
+#  Установка postgresql
+- name: Install postgresql (state=present is optional)
+  become: yes
+  ansible.builtin.apt:
+    name: postgresql
+    state: present
+
+# Установка zabbix
+# https://www.zabbix.com/download?zabbix=6.4&os_distribution=ubuntu&os_version=22.04&components=server_frontend_agent&db=pgsql&ws=nginx
+
+# Добавление репозитория
+# https://docs.ansible.com/ansible/latest/collections/ansible/builtin/apt_repository_module.html
+
+# wget https://repo.zabbix.com/zabbix/6.4/ubuntu/pool/main/z/zabbix-release/zabbix-release_6.4-1+ubuntu22.04_all.deb
+# dpkg -i zabbix-release_6.4-1+ubuntu22.04_all.deb
+# apt update
+
+- name: Install the zabbix-release_6.4-1 from a repo.zabbix.com
+  become: yes
+  ansible.builtin.apt:
+    deb: https://repo.zabbix.com/zabbix/6.4/ubuntu/pool/main/z/zabbix-release/zabbix-release_6.4-1+ubuntu22.04_all.deb
+
+#- name: Download zabbix-release repo
+#  ansible.builtin.get_url:
+#    url: https://repo.zabbix.com/zabbix/6.4/ubuntu/pool/main/z/zabbix-release/zabbix-release_6.4-1+ubuntu22.04_all.deb
+#    dest: /home/adrin/
+#    mode: '0440'
+
+#https://docs.ansible.com/ansible/latest/collections/ansible/builtin/dpkg_selections_module.html
+
+#- name: Allow zabbix to be upgraded
+#  become: yes
+#  ansible.builtin.dpkg_selections:
+#    name: /home/adrin/zabbix-release_6.4-1+ubuntu22.04_all.deb
+#    selection: install
+
+# apt install zabbix-server-pgsql zabbix-frontend-php php8.1-pgsql zabbix-nginx-conf zabbix-sql-scripts zabbix-agent
+
+- name: Run the equivalent of "apt-get update" as a separate step
+  become: yes
+  ansible.builtin.apt:
+    update_cache: yes
+
+- name: Install zabbiz server, frontend, agent (state=present is optional)
+  become: yes
+  ansible.builtin.apt:
+    name:
+      - zabbix-server-pgsql
+      - zabbix-frontend-php
+      - php8.1-pgsql
+      - zabbix-nginx-conf
+      - zabbix-sql-scripts
+      - zabbix-agent
+    state: present
