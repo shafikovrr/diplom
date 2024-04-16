@@ -3,7 +3,7 @@
 
 ## Веб-сервера
 
-/* resource "yandex_compute_instance" "web-host-1" {
+resource "yandex_compute_instance" "web-host-1" {
   name        = "web-host-1"
   description = "веб-сервер 1"
   hostname    = "web-host-1"
@@ -56,7 +56,7 @@ resource "yandex_compute_instance" "web-host-2" {
 
 # elasticsearch
 
-resource "yandex_compute_instance" "elasticsearch" {
+/* resource "yandex_compute_instance" "elasticsearch" {
   name        = "elasticsearch"
   description = "host elasticsearch"
   hostname    = "elasticsearch"
@@ -80,8 +80,8 @@ resource "yandex_compute_instance" "elasticsearch" {
   scheduling_policy {
     preemptible = true
   }
-}
- */
+} */
+
 # zabbix
 
 resource "yandex_compute_instance" "zabbix" {

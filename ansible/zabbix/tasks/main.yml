@@ -36,19 +36,19 @@
 
 - name: Создание пользователя zabbix
   become: yes
-  ansible.builtin.shell: su - postgres -c 'psql --command "CREATE USER zabbix WITH PASSWORD '\'123456789\'';"'
+  ansible.builtin.shell: su - postgres -c 'psql --command "CREATE USER "{{ db_user }}" WITH PASSWORD '\'"{{ db_password }}"\'';"'
 
 - name: Создание базы данных zabbix (владелец zabbix)
   become: yes
-  ansible.builtin.shell: su - postgres -c 'psql --command "CREATE DATABASE zabbix OWNER zabbix;"'
+  ansible.builtin.shell: su - postgres -c 'psql --command "CREATE DATABASE "{{ db_name }}" OWNER "{{ db_user }}";"'
 
 - name: Импорт начальной схемы базы данных
   become: yes
-  ansible.builtin.shell: zcat /usr/share/zabbix-sql-scripts/postgresql/server.sql.gz | sudo -u zabbix psql zabbix
+  ansible.builtin.shell: zcat /usr/share/zabbix-sql-scripts/postgresql/server.sql.gz | sudo -u "{{ db_user }}" psql "{{ db_name }}"
 
 - name: Импорт пароля базы данных
   become: yes
-  ansible.builtin.shell: sed -i 's/# DBPassword=/DBPassword=123456789/g' /etc/zabbix/zabbix_server.conf
+  ansible.builtin.shell: sed -i 's/# DBPassword=/DBPassword="{{ db_password }}"/g' /etc/zabbix/zabbix_server.conf
 
 # 6. Рестарт и enabled zabbix-server zabbix-agent nginx php8.1-fpm
 
