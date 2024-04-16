@@ -1,6 +1,0 @@
-[all:children]
-zabbix
-
-[zabbix]
-84.201.176.201 ansible_ssh_user=adrin ansible_ssh_private_key_file=~/.ssh/id_web_host
-
