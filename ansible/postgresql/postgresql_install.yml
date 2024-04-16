@@ -1,0 +1,12 @@
+---
+- name: "Install postgresql and congigure"
+  hosts: zabbix
+  gather_facts: false
+  become: yes
+  become_method: sudo
+  vars_files:
+    - vars.yml
+  roles:
+  - include_role:
+    name: postgresql
+    tasks_from: main

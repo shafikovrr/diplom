@@ -6,26 +6,26 @@ resource "yandex_vpc_network" "network" {
 
 # vpc_subnet
 
-resource "yandex_vpc_subnet" "subnet-a" {
+/* resource "yandex_vpc_subnet" "subnet-a" {
   name           = "subnet1"
   zone           = var.zone_a
   network_id     = yandex_vpc_network.network.id
   v4_cidr_blocks = ["192.168.10.0/24"]
-}
+} */
 resource "yandex_vpc_subnet" "subnet-b" {
   name           = "subnet2"
   zone           = var.zone_b
   network_id     = yandex_vpc_network.network.id
   v4_cidr_blocks = ["192.168.11.0/24"]
 }
-resource "yandex_vpc_subnet" "subnet-d" {
+/* resource "yandex_vpc_subnet" "subnet-d" {
   name           = "subnet3"
   zone           = var.zone_d
   network_id     = yandex_vpc_network.network.id
   v4_cidr_blocks = ["192.168.12.0/24"]
 }
-
-# target-group
+ */
+/* # target-group
 resource "yandex_alb_target_group" "web-hosts-group" {
   name = "web-hosts-group"
   target {
@@ -120,4 +120,4 @@ resource "yandex_alb_load_balancer" "web-hosts-balancer" {
       }
     }
   }
-}
+} */

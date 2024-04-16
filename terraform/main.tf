@@ -3,7 +3,7 @@
 
 ## Веб-сервера
 
-resource "yandex_compute_instance" "web-host-1" {
+/* resource "yandex_compute_instance" "web-host-1" {
   name        = "web-host-1"
   description = "веб-сервер 1"
   hostname    = "web-host-1"
@@ -81,7 +81,7 @@ resource "yandex_compute_instance" "elasticsearch" {
     preemptible = true
   }
 }
-
+ */
 # zabbix
 
 resource "yandex_compute_instance" "zabbix" {
@@ -110,7 +110,7 @@ resource "yandex_compute_instance" "zabbix" {
   }
 }
 
-#kibana
+/* #kibana
 
 resource "yandex_compute_instance" "kibana" {
   name        = "kibana"
@@ -165,3 +165,4 @@ resource "yandex_compute_instance" "bastion" {
     preemptible = true
   }
 }
+ */

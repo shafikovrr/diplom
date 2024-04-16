@@ -1,0 +1,74 @@
+---
+
+# sudo apt update
+
+- name: Run the equivalent of "apt-get update" as a separate step
+  become: yes
+  ansible.builtin.apt:
+    update_cache: yes
+
+- name: Install the zabbix-release_6.4-1 from a repo.zabbix.com
+  become: yes
+  ansible.builtin.apt:
+    deb: https://repo.zabbix.com/zabbix/6.4/ubuntu/pool/main/z/zabbix-release/zabbix-release_6.4-1+ubuntu22.04_all.deb
+
+- name: Run the equivalent of "apt-get update" as a separate step
+  become: yes
+  ansible.builtin.apt:
+    update_cache: yes
+
+- name: Install zabbiz server, frontend, agent (state=present is optional)
+  become: yes
+  ansible.builtin.apt:
+    name:
+      - zabbix-server-pgsql
+      - zabbix-frontend-php
+      - php8.1-pgsql
+      - zabbix-apache-conf
+      - zabbix-sql-scripts
+      - zabbix-agent
+    state: present
+
+- name: Run the equivalent of "apt-get update" as a separate step
+  become: yes
+  ansible.builtin.apt:
+    update_cache: yes
+
+- name: Создание пользователя zabbix
+  become: yes
+  ansible.builtin.shell: su - postgres -c 'psql --command "CREATE USER zabbix WITH PASSWORD '\'123456789\'';"'
+
+- name: Создание базы данных zabbix (владелец zabbix)
+  become: yes
+  ansible.builtin.shell: su - postgres -c 'psql --command "CREATE DATABASE zabbix OWNER zabbix;"'
+
+- name: Импорт начальной схемы базы данных
+  become: yes
+  ansible.builtin.shell: zcat /usr/share/zabbix-sql-scripts/postgresql/server.sql.gz | sudo -u zabbix psql zabbix
+
+- name: Импорт пароля базы данных
+  become: yes
+  ansible.builtin.shell: sed -i 's/# DBPassword=/DBPassword=123456789/g' /etc/zabbix/zabbix_server.conf
+
+# 6. Рестарт и enabled zabbix-server zabbix-agent nginx php8.1-fpm
+
+- name: "Restart"
+  become: yes
+  service:
+    name: zabbix-server
+    state: restarted
+    enabled: yes
+
+- name: "Restart"
+  become: yes
+  service:
+    name: zabbix-agent
+    state: restarted
+    enabled: yes
+
+- name: "Restart"
+  become: yes
+  service:
+    name: apache2
+    state: restarted
+    enabled: yes

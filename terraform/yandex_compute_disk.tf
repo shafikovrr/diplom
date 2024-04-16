@@ -1,6 +1,6 @@
 #######
 # Настройка дисков
-resource "yandex_compute_disk" "boot-disk-web-host-1" {
+/* resource "yandex_compute_disk" "boot-disk-web-host-1" {
   name        = "disk-web-host-1"
   description = "диск для веб-сервера 1"
   type        = "network-hdd"
@@ -15,7 +15,7 @@ resource "yandex_compute_disk" "boot-disk-web-host-2" {
   zone        = var.zone_b
   size        = 10
   image_id    = var.image_id
-}
+} */
 resource "yandex_compute_disk" "zabbix" {
   name        = "zabbix"
   description = "диск для zabbix"
@@ -24,7 +24,7 @@ resource "yandex_compute_disk" "zabbix" {
   size        = 10
   image_id    = var.image_id
 }
-resource "yandex_compute_disk" "elasticsearch" {
+/* resource "yandex_compute_disk" "elasticsearch" {
   name        = "elasticsearch"
   description = "диск для elasticsearch"
   type        = "network-hdd"
@@ -47,4 +47,4 @@ resource "yandex_compute_disk" "bastion" {
   zone        = var.zone_d
   size        = 10
   image_id    = var.image_id
-}
+} */

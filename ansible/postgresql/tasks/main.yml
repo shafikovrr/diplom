@@ -1,0 +1,42 @@
+---
+# Import the repository signing key:
+
+- name: Install curl ca-certificates
+  become: yes
+  ansible.builtin.apt:
+    name:
+      - curl 
+      - ca-certificates
+    state: present
+
+- name:
+  become: yes
+  ansible.builtin.shell: sudo install -d /usr/share/postgresql-common/pgdg
+
+- name:
+  become: yes
+  ansible.builtin.shell: sudo curl -o /usr/share/postgresql-common/pgdg/apt.postgresql.org.asc --fail https://www.postgresql.org/media/keys/ACCC4CF8.asc
+
+- name: Run the equivalent of "apt-get update" as a separate step
+  become: yes
+  ansible.builtin.apt:
+    update_cache: yes
+
+#- name: Upgrade the OS (apt-get dist-upgrade)
+#  become: yes
+#  ansible.builtin.apt:
+#    upgrade: dist   
+
+#  Установка postgresql
+- name: Install postgresql (state=present is optional)
+  become: yes
+  ansible.builtin.apt:
+    name: 
+      - postgresql
+    state: present
+
+- name: Start and enable service postgresql
+  ansible.builtin.service:
+    name: postgresql
+    state: started
+    enabled: yes

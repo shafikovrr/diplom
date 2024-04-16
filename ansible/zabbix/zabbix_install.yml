@@ -1,6 +1,8 @@
 ---
 - name: "Install zabbix and congigure"
   hosts: zabbix
+  vars_files:
+    - vars.yml
   gather_facts: yes
   roles:
   - include_role:
