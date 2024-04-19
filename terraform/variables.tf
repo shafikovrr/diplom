@@ -29,6 +29,10 @@ variable "image_id" {
   type = string
 }
 
+variable "bastion_image_id" {
+  type = string
+}
+
 variable "platform" {
   type = string
 }

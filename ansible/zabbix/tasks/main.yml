@@ -48,7 +48,7 @@
 
 - name: Импорт пароля базы данных
   become: yes
-  ansible.builtin.shell: sed -i 's/# DBPassword=/DBPassword="{{ db_password }}"/g' /etc/zabbix/zabbix_server.conf
+  ansible.builtin.shell: sed -i 's/# DBPassword=/DBPassword={{ db_password }}/g' /etc/zabbix/zabbix_server.conf
 
 # 6. Рестарт и enabled zabbix-server zabbix-agent nginx php8.1-fpm
 
@@ -72,3 +72,4 @@
     name: apache2
     state: restarted
     enabled: yes
+

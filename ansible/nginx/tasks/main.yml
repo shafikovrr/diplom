@@ -73,9 +73,9 @@
     state: restarted
     enabled: yes
 
-- name: Импорт пароля базы данных
+- name: Импорт ip zabbix сервера
   become: yes
-  ansible.builtin.shell: sed -i 's/Server=127.0.0.1/Server="{{ ip_zabbix_server }}"/g' /etc/zabbix/zabbix_agentd.conf
+  ansible.builtin.shell: sed -i 's/Server=127.0.0.1/Server={{ ip_zabbix_server }}/g' /etc/zabbix/zabbix_agentd.conf
 
 - name: "Restart zabbix-agent"
   become: yes
