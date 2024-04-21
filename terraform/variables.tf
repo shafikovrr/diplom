@@ -45,6 +45,9 @@ variable "ssh_folder" {
   type = string
 }
 
+variable "ssh_bastion" {
+  type = string
+}
 #variable "service_account_key_file" {
 #  description = "Service account key file"
 #  type        = string

@@ -7,3 +7,4 @@ terraform/.terraform.lock.hcl
 terraform/.terraform.tfstate.lock.info
 .gitignore
 terraform.tfstate
+terraform.tfvars
