@@ -94,3 +94,86 @@ resource "yandex_compute_instance" "web-host-2" {
   }
 }
 
+# elasticsearch
+
+resource "yandex_compute_instance" "elasticsearch" {
+  name        = "elasticsearch"
+  description = "host elasticsearch"
+  hostname    = "elasticsearch"
+  zone        = var.zone_a
+  platform_id = var.platform
+  resources {
+    cores         = 2
+    core_fraction = 20
+    memory        = 2
+  }
+  boot_disk {
+    disk_id = yandex_compute_disk.elasticsearch.id
+  }
+  network_interface {
+    subnet_id = yandex_vpc_subnet.bastion-internal-segment-1.id
+    nat       = false
+  }
+  metadata = {
+    user-data = "${file("./meta.yml")}"
+  }
+  scheduling_policy {
+    preemptible = true
+  }
+}
+
+# zabbix
+
+resource "yandex_compute_instance" "zabbix" {
+  name        = "zabbix"
+  description = "host zabbix"
+  hostname    = "zabbix"
+  zone        = var.zone_d
+  platform_id = var.platform
+  resources {
+    cores         = 2
+    core_fraction = 20
+    memory        = 2
+  }
+  boot_disk {
+    disk_id = yandex_compute_disk.zabbix.id
+  }
+  network_interface {
+    subnet_id = yandex_vpc_subnet.bastion-external-segment.id
+    nat       = true
+  }
+  metadata = {
+    user-data = "${file("./meta.yml")}"
+  }
+  scheduling_policy {
+    preemptible = true
+  }
+}
+
+#kibana
+
+resource "yandex_compute_instance" "kibana" {
+  name        = "kibana"
+  description = "host kibanah"
+  hostname    = "kibana"
+  zone        = var.zone_d
+  platform_id = var.platform
+  resources {
+    cores         = 2
+    core_fraction = 20
+    memory        = 2
+  }
+  boot_disk {
+    disk_id = yandex_compute_disk.kibana.id
+  }
+  network_interface {
+    subnet_id = yandex_vpc_subnet.bastion-external-segment.id
+    nat       = true
+  }
+  metadata = {
+    user-data = "${file("./meta.yml")}"
+  }
+  scheduling_policy {
+    preemptible = true
+  }
+}

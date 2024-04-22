@@ -27,7 +27,7 @@ resource "yandex_compute_disk" "boot-disk-web-host-2" {
   image_id    = var.image_id
 }
 
-/* # Диск для zabbix
+# Диск для zabbix
 resource "yandex_compute_disk" "zabbix" {
   name        = "zabbix"
   description = "диск для zabbix"
@@ -55,5 +55,5 @@ resource "yandex_compute_disk" "kibana" {
   zone        = var.zone_d
   size        = 10
   image_id    = var.image_id
-} */
+}
 

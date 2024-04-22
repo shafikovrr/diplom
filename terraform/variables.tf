@@ -37,7 +37,11 @@ variable "platform" {
   type = string
 }
 
-variable "ssh_user" {
+variable "ssh_host_user" {
+  type = string
+}
+
+variable "ssh_bastion_user" {
   type = string
 }
 
@@ -48,6 +52,19 @@ variable "ssh_folder" {
 variable "ssh_bastion" {
   type = string
 }
+
+variable "proxy_jump" {
+  type = string
+}
+
+variable "ssh_port" {
+  type = string
+}
+
+variable "http_port" {
+  type = string
+}
+
 #variable "service_account_key_file" {
 #  description = "Service account key file"
 #  type        = string

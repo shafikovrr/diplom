@@ -1,0 +1,15 @@
+[bastion]
+bastion-host
+
+[webservers]
+web_server_1
+web_server_2
+
+[elasticsearch]
+elasticsearch
+
+[kibana]
+kibana
+
+[zabbix]
+zabbix

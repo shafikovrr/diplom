@@ -1,26 +1,33 @@
 resource "local_file" "inventory" {
   content  = <<EOF
 
-[all:children]
-bastion
-webservers
+Host ${var.proxy_jump}
+  HostName ${yandex_vpc_address.addr.external_ipv4_address.0.address}
+  User ${var.ssh_host_user}
+  Port ${var.ssh_port}
+  IdentityFile ${var.ssh_bastion}
 
-[bastion]
-bastion-host ${yandex_vpc_address.addr.external_ipv4_address.0.address}
-
-[webservers]
-web_host_1 ansible_host=${yandex_compute_instance.web-host-1.network_interface.0.ip_address}
-web_host_2 ansible_host=${yandex_compute_instance.web-host-2.network_interface.0.ip_address}
-
-[webservers:vars]
-ansible_ssh_user=${var.ssh_user} 
-ansible_ssh_private_key_file=${var.ssh_bastion}
-ansible_ssh_common_args='-o ProxyCommand="ssh -W %h:%p -q ${var.ssh_user}@${yandex_vpc_address.addr.external_ipv4_address.0.address}"'
+Host web_server_1
+  HostName ${yandex_compute_instance.web-host-1.network_interface.0.ip_address}
+  User ${var.ssh_host_user}
+  Port ${var.ssh_port}
+  IdentityFile ${var.ssh_bastion}
+  ProxyJump ${var.proxy_jump}
+  
+Host web_server_2
+  HostName ${yandex_compute_instance.web-host-2.network_interface.0.ip_address}
+  User ${var.ssh_host_user}
+  Port ${var.ssh_port}
+  IdentityFile ${var.ssh_bastion}
+  ProxyJump ${var.proxy_jump}
 
 EOF
-  filename = "../ansible/hosts"
+  filename = "/home/adrin/.ssh/config"
 }
 
+
+#ansible_ssh_user=${var.ssh_host_user} 
+#ansible_ssh_private_key_file=${var.ssh_bastion}
 #https://docs.ansible.com/ansible/latest/network/user_guide/network_debug_troubleshooting.html#network-delegate-to-vs-proxycommand
 
 # https://andrdi.com/blog/terraform-ansible-provisioner.html

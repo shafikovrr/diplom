@@ -12,7 +12,7 @@ resource "yandex_vpc_subnet" "bastion-external-segment" {
   zone           = var.zone_d
   network_id     = yandex_vpc_network.network.id
   v4_cidr_blocks = ["192.168.10.0/24"]
-  #  route_table_id = yandex_vpc_route_table.rt.id
+  route_table_id = yandex_vpc_route_table.rt.id
 }
 
 # Подсеть "внутренней сети" (internal_bastion_vpc_subnet)
@@ -21,7 +21,7 @@ resource "yandex_vpc_subnet" "bastion-internal-segment-1" {
   zone           = var.zone_a
   network_id     = yandex_vpc_network.network.id
   v4_cidr_blocks = ["192.168.11.0/24"]
-  #  route_table_id = yandex_vpc_route_table.rt.id
+  route_table_id = yandex_vpc_route_table.rt.id
 }
 
 # Подсеть "внутренней сети" (internal_bastion_vpc_subnet)
@@ -30,10 +30,10 @@ resource "yandex_vpc_subnet" "bastion-internal-segment-2" {
   zone           = var.zone_b
   network_id     = yandex_vpc_network.network.id
   v4_cidr_blocks = ["192.168.12.0/24"]
-  #route_table_id = yandex_vpc_route_table.rt.id
+  route_table_id = yandex_vpc_route_table.rt.id
 }
 
-/* resource "yandex_vpc_gateway" "nat_gateway" {
+resource "yandex_vpc_gateway" "nat_gateway" {
   name = "nat-gateway"
   shared_egress_gateway {}
 }
@@ -46,7 +46,7 @@ resource "yandex_vpc_route_table" "rt" {
     destination_prefix = "0.0.0.0/0"
     gateway_id         = yandex_vpc_gateway.nat_gateway.id
   }
-} */
+}
 
 # Группа безопасности бастионного хоста (вход только по ssh, выход любой)
 resource "yandex_vpc_security_group" "secure-bastion-sg" {
@@ -54,7 +54,7 @@ resource "yandex_vpc_security_group" "secure-bastion-sg" {
   network_id = yandex_vpc_network.network.id
   ingress { #входящий
     protocol       = "TCP"
-    port           = 22
+    port           = var.ssh_port
     v4_cidr_blocks = ["0.0.0.0/0"]
   }
   egress {
@@ -69,19 +69,17 @@ resource "yandex_vpc_security_group" "internal-bastion-sg" {
   network_id = yandex_vpc_network.network.id
   ingress { #входящий
     protocol = "TCP"
-    port     = 22
+    port     = var.ssh_port
     v4_cidr_blocks = [
       "192.168.10.0/24",
       "192.168.11.0/24",
       "192.168.12.0/24"
     ]
   }
-/*   egress { #исходящий
-    protocol          = "ANY"
-    from_port         = 0
-    to_port           = 65535
-    predefined_target = "self_security_group"
-  } */
+  egress {
+    protocol       = "ANY"
+    v4_cidr_blocks = ["0.0.0.0/0"]
+  }
 }
 
 resource "yandex_vpc_security_group" "webserver-sg" {
@@ -89,28 +87,18 @@ resource "yandex_vpc_security_group" "webserver-sg" {
   network_id = yandex_vpc_network.network.id
   ingress { #входящий
     protocol = "TCP"
-    port     = 80
+    port     = var.http_port
     v4_cidr_blocks = [
       "192.168.10.0/24",
       "192.168.11.0/24",
       "192.168.12.0/24"
     ]
   }
-    egress {
+  egress {
     protocol       = "ANY"
     v4_cidr_blocks = ["0.0.0.0/0"]
   }
 }
-
-
-
-
-
-
-
-
-
-
 
 # Резервирование ip адреса bastion
 #https://github.com/yandex-cloud/docs/blob/master/ru/compute/operations/vm-control/vm-attach-public-ip.md
@@ -145,13 +133,13 @@ resource "yandex_alb_backend_group" "backend-group" {
   http_backend {
     name             = "web-hosts-http-backend"
     weight           = 1
-    port             = 80
+    port             = var.http_port
     target_group_ids = ["${yandex_alb_target_group.web-hosts-group.id}"]
     load_balancing_config {
       panic_threshold = 90
     }
     healthcheck {
-      healthcheck_port    = 80
+      healthcheck_port    = var.http_port
       timeout             = "10s"
       interval            = "2s"
       healthy_threshold   = 10
@@ -208,7 +196,7 @@ resource "yandex_alb_load_balancer" "web-hosts-balancer" {
         external_ipv4_address {
         }
       }
-      ports = [80]
+      ports = [var.http_port]
     }
     http {
       handler {

@@ -5,7 +5,7 @@
 # https://docs.ansible.com/ansible/latest/collections/ansible/builtin/apt_module.html
 
 - name: Install nginx (state=present is optional)
-  become: yes
+  become: true
   ansible.builtin.apt:
     name: nginx
     state: present
@@ -14,19 +14,19 @@
 # https://docs.ansible.com/ansible/latest/collections/ansible/builtin/template_module.html
 
 - name: "Add Index page"
-  become: yes
+  become: true
   template:
     src: "index.html.j2"
     dest: "/var/www/html/index.html"
     owner: root
     group: root
-    mode: '0644' # 0755
+    mode: "0644" # 0755
 
 # 3. Рестарт и enabled
 # https://docs.ansible.com/ansible/latest/collections/ansible/builtin/service_module.html
 
 - name: "Restart nginx"
-  become: yes
+  become: true
   ansible.builtin.service:
     name: nginx
     state: restarted
@@ -43,7 +43,7 @@
 # 5. Установка zabbix-agent
 
 - name: "Install zabbix-agent"
-  become: yes
+  become: true
   ansible.builtin.apt:
     name: zabbix-agent
     state: present
@@ -51,7 +51,7 @@
 # 6. Рестарт и enabled zabbix-agent
 
 - name: "Restart zabbix-agent"
-  become: yes
+  become: true
   service:
     name: zabbix-agent
     state: restarted
@@ -60,27 +60,26 @@
 # 7. Установка filebeat
 
 - name: Install the filebeat-8.9.2-amd64.deb from a mirror.yandex.ru
-  become: yes
+  become: true
   ansible.builtin.apt:
     deb: https://mirror.yandex.ru/mirrors/elastic/8/pool/main/f/filebeat/filebeat-8.9.2-amd64.deb
-    
+
 # 6. Рестарт и enabled filebeat
 
 - name: "Restart filebeat"
-  become: yes
+  become: true
   service:
     name: filebeat
     state: restarted
     enabled: yes
 
-- name: Импорт ip zabbix сервера
-  become: yes
-  ansible.builtin.shell: sed -i 's/Server=127.0.0.1/Server={{ ip_zabbix_server }}/g' /etc/zabbix/zabbix_agentd.conf
+#- name: Импорт ip zabbix сервера
+#  become: true
+#  ansible.builtin.shell: sed -i 's/Server=127.0.0.1/Server={{ ip_zabbix_server }}/g' /etc/zabbix/zabbix_agentd.conf
 
-- name: "Restart zabbix-agent"
-  become: yes
-  service:
-    name: zabbix-agent
-    state: restarted
-    enabled: yes
-
+#- name: "Restart zabbix-agent"
+#  become: true
+#  service:
+#    name: zabbix-agent
+#    state: restarted
+#    enabled: yes
