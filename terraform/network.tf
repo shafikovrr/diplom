@@ -81,7 +81,7 @@ resource "yandex_vpc_security_group" "internal-bastion-sg" {
     v4_cidr_blocks = ["0.0.0.0/0"]
   }
 }
-
+#https://yandex.cloud/ru/docs/vpc/concepts/security-groups
 resource "yandex_vpc_security_group" "webserver-sg" {
   name       = "webserver-sg"
   network_id = yandex_vpc_network.network.id
@@ -94,6 +94,12 @@ resource "yandex_vpc_security_group" "webserver-sg" {
       "192.168.12.0/24"
     ]
   }
+  ingress {
+    description = "Health checks from NLB"
+    protocol = "TCP"
+    predefined_target = "loadbalancer_healthchecks"
+  }
+  
   egress {
     protocol       = "ANY"
     v4_cidr_blocks = ["0.0.0.0/0"]

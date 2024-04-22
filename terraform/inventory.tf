@@ -21,6 +21,27 @@ Host web_server_2
   IdentityFile ${var.ssh_bastion}
   ProxyJump ${var.proxy_jump}
 
+Host zabbix
+  HostName ${yandex_compute_instance.zabbix.network_interface.0.ip_address}
+  User ${var.ssh_host_user}
+  Port ${var.ssh_port}
+  IdentityFile ${var.ssh_bastion}
+  ProxyJump ${var.proxy_jump}
+
+Host kibana
+  HostName ${yandex_compute_instance.kibana.network_interface.0.ip_address}
+  User ${var.ssh_host_user}
+  Port ${var.ssh_port}
+  IdentityFile ${var.ssh_bastion}
+  ProxyJump ${var.proxy_jump}
+
+Host elasticsearch
+  HostName ${yandex_compute_instance.elasticsearch.network_interface.0.ip_address}
+  User ${var.ssh_host_user}
+  Port ${var.ssh_port}
+  IdentityFile ${var.ssh_bastion}
+  ProxyJump ${var.proxy_jump}
+
 EOF
   filename = "/home/adrin/.ssh/config"
 }

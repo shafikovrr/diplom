@@ -2,7 +2,7 @@
 - name: "Install postgresql and congigure"
   hosts: zabbix
   gather_facts: false
-  become: yes
+  become: true
   become_method: sudo
   vars_files:
     - vars.yml
