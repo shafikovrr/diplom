@@ -28,6 +28,9 @@ output "internal_ip_address_elas" {
 output "external_ip_address_zabb" {
   value = yandex_compute_instance.zabbix.network_interface.0.nat_ip_address
 }
+output "internal_ip_address_zabb" {
+  value = yandex_compute_instance.zabbix.network_interface.0.ip_address
+}
 output "external_ip_address_kiba" {
   value = yandex_compute_instance.kibana.network_interface.0.nat_ip_address
 }

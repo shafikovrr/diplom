@@ -141,6 +141,9 @@ resource "yandex_compute_instance" "zabbix" {
   network_interface {
     subnet_id = yandex_vpc_subnet.bastion-external-segment.id
     nat       = true
+    security_group_ids = [
+      yandex_vpc_security_group.zabbix-sg.id
+    ]
   }
   metadata = {
     user-data = "${file("./meta.yml")}"

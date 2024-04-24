@@ -94,15 +94,55 @@ resource "yandex_vpc_security_group" "webserver-sg" {
       "192.168.12.0/24"
     ]
   }
-  ingress {
-    description = "Health checks from NLB"
+  ingress { #входящий
     protocol = "TCP"
+    port     = 10050
+    v4_cidr_blocks = [
+      "192.168.10.0/24",
+      "192.168.11.0/24",
+      "192.168.12.0/24"
+    ]
+  }
+
+  ingress {
+    description       = "Health checks from NLB"
+    protocol          = "TCP"
     predefined_target = "loadbalancer_healthchecks"
   }
-  
+
   egress {
     protocol       = "ANY"
     v4_cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
+#Zabbix
+resource "yandex_vpc_security_group" "zabbix-sg" {
+  name       = "zabbix-sg"
+  network_id = yandex_vpc_network.network.id
+  ingress {
+    protocol       = "TCP"
+    port           = var.http_port
+    v4_cidr_blocks = ["0.0.0.0/0"]
+  }
+  ingress { #входящий
+    protocol = "TCP"
+    port     = 10051
+    v4_cidr_blocks = [
+      "192.168.10.0/24",
+      "192.168.11.0/24",
+      "192.168.12.0/24"
+    ]
+  }
+  egress {
+    protocol  = "ANY"
+    from_port = 0
+    to_port   = 65535
+    v4_cidr_blocks = [
+      "192.168.10.0/24",
+      "192.168.11.0/24",
+      "192.168.12.0/24"
+    ]
   }
 }
 
@@ -114,6 +154,14 @@ resource "yandex_vpc_address" "addr" {
     zone_id = var.zone_d
   }
 }
+
+
+
+
+
+
+
+
 
 # target-group
 resource "yandex_alb_target_group" "web-hosts-group" {
