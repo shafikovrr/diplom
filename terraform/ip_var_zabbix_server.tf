@@ -7,8 +7,8 @@ EOF
 
 resource "local_file" "ip_vars_zabbix_agent" {
   content  = <<EOF
-agent_web_host_1: ${yandex_compute_instance.web-host-1.network_interface.0.nat_ip_address}
-agent_web_host_2: ${yandex_compute_instance.web-host-2.network_interface.0.nat_ip_address}
+agent_web_host_1: ${yandex_compute_instance.web-host-1.network_interface.0.ip_address}
+agent_web_host_2: ${yandex_compute_instance.web-host-2.network_interface.0.ip_address}
    
 EOF
   filename = "../ansible/zabbix/vars/ip_var_zabbix_agent.yml"
