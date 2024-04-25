@@ -5,7 +5,7 @@
   become: true
   become_method: sudo
   vars_files:
-    - vars.yml
+    - main.yml
   roles:
   - include_role:
     name: postgresql

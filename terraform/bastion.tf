@@ -113,6 +113,10 @@ resource "yandex_compute_instance" "elasticsearch" {
   network_interface {
     subnet_id = yandex_vpc_subnet.bastion-internal-segment-1.id
     nat       = false
+    security_group_ids = [
+      yandex_vpc_security_group.internal-bastion-sg.id,
+      yandex_vpc_security_group.elasticsearch-sg.id
+    ]
   }
   metadata = {
     user-data = "${file("./meta.yml")}"
@@ -142,7 +146,8 @@ resource "yandex_compute_instance" "zabbix" {
     subnet_id = yandex_vpc_subnet.bastion-external-segment.id
     nat       = true
     security_group_ids = [
-      yandex_vpc_security_group.zabbix-sg.id
+      yandex_vpc_security_group.zabbix-sg.id,
+      yandex_vpc_security_group.internal-bastion-sg.id
     ]
   }
   metadata = {
@@ -172,6 +177,9 @@ resource "yandex_compute_instance" "kibana" {
   network_interface {
     subnet_id = yandex_vpc_subnet.bastion-external-segment.id
     nat       = true
+    security_group_ids = [
+      yandex_vpc_security_group.internal-bastion-sg.id
+    ]
   }
   metadata = {
     user-data = "${file("./meta.yml")}"

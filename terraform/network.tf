@@ -67,7 +67,7 @@ resource "yandex_vpc_security_group" "secure-bastion-sg" {
 resource "yandex_vpc_security_group" "internal-bastion-sg" {
   name       = "internal-bastion-sg"
   network_id = yandex_vpc_network.network.id
-  ingress { #входящий
+  ingress { #входящий для подсетей 10, 11, 12 на порт 22
     protocol = "TCP"
     port     = var.ssh_port
     v4_cidr_blocks = [
@@ -76,7 +76,7 @@ resource "yandex_vpc_security_group" "internal-bastion-sg" {
       "192.168.12.0/24"
     ]
   }
-  egress {
+  egress { #исходящий любой, на любой хост
     protocol       = "ANY"
     v4_cidr_blocks = ["0.0.0.0/0"]
   }
@@ -85,7 +85,7 @@ resource "yandex_vpc_security_group" "internal-bastion-sg" {
 resource "yandex_vpc_security_group" "webserver-sg" {
   name       = "webserver-sg"
   network_id = yandex_vpc_network.network.id
-  ingress { #входящий
+  ingress { #входящий на 80 порт для 10, 11, 12 подсети
     protocol = "TCP"
     port     = var.http_port
     v4_cidr_blocks = [
@@ -94,7 +94,7 @@ resource "yandex_vpc_security_group" "webserver-sg" {
       "192.168.12.0/24"
     ]
   }
-  ingress { #входящий
+  ingress { #входящий с zabbix servera на хосты (zabbix-agent) в подсетях 10,11,12
     protocol = "TCP"
     port     = 10050
     v4_cidr_blocks = [
@@ -110,7 +110,7 @@ resource "yandex_vpc_security_group" "webserver-sg" {
     predefined_target = "loadbalancer_healthchecks"
   }
 
-  egress {
+  egress { #исходщий любой
     protocol       = "ANY"
     v4_cidr_blocks = ["0.0.0.0/0"]
   }
@@ -125,7 +125,7 @@ resource "yandex_vpc_security_group" "zabbix-sg" {
     port           = var.http_port
     v4_cidr_blocks = ["0.0.0.0/0"]
   }
-  ingress { #входящий
+  ingress { #входящий с zabbix агентов на 10051 порт
     protocol = "TCP"
     port     = 10051
     v4_cidr_blocks = [
@@ -134,7 +134,7 @@ resource "yandex_vpc_security_group" "zabbix-sg" {
       "192.168.12.0/24"
     ]
   }
-  egress {
+  egress { #исходящий любой на хосты в подсетях 10,11,12
     protocol  = "ANY"
     from_port = 0
     to_port   = 65535
@@ -146,6 +146,50 @@ resource "yandex_vpc_security_group" "zabbix-sg" {
   }
 }
 
+#Elasticsearch
+resource "yandex_vpc_security_group" "elasticsearch-sg" {
+  name       = "elasticsearch-sg"
+  network_id = yandex_vpc_network.network.id
+  ingress { #входящий на 9100 порт
+    protocol       = "TCP"
+    port           = 9100
+    v4_cidr_blocks = [
+      "192.168.10.0/24",
+      "192.168.11.0/24",
+      "192.168.12.0/24"
+    ]
+  }
+  ingress { #входящий на 9200 порт
+    protocol = "TCP"
+    port     = 9200
+    v4_cidr_blocks = [
+      "192.168.10.0/24",
+      "192.168.11.0/24",
+      "192.168.12.0/24"
+    ]
+  }
+
+  ingress { #входящий с zabbix servera на хосты (zabbix-agent) в подсетях 10,11,12
+    protocol = "TCP"
+    port     = 10050
+    v4_cidr_blocks = [
+      "192.168.10.0/24",
+      "192.168.11.0/24",
+      "192.168.12.0/24"
+    ]
+  }
+
+  egress { #исходящий любой на любой хост
+    protocol  = "ANY"
+    from_port = 0
+    to_port   = 65535
+    v4_cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
+
+
+
 # Резервирование ip адреса bastion
 #https://github.com/yandex-cloud/docs/blob/master/ru/compute/operations/vm-control/vm-attach-public-ip.md
 resource "yandex_vpc_address" "addr" {
@@ -154,14 +198,6 @@ resource "yandex_vpc_address" "addr" {
     zone_id = var.zone_d
   }
 }
-
-
-
-
-
-
-
-
 
 # target-group
 resource "yandex_alb_target_group" "web-hosts-group" {

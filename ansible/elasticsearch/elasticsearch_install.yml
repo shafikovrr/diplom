@@ -1,0 +1,13 @@
+---
+- name: "Install elasticsearch and congigure"
+  hosts: elasticsearch
+  gather_facts: yes
+  vars_files:
+    - ip_var_zabbix_server.yml
+  roles:
+  - include_role:
+    name: elasticsearch
+    tasks_from: main
+
+
+

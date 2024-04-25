@@ -1,0 +1,22 @@
+---
+# tasks file for kibana
+# 5. Установка zabbix-agent
+
+- name: "Install zabbix-agent"
+  become: true
+  ansible.builtin.apt:
+    name: zabbix-agent
+    state: present
+
+# 6. Импорт ip zabix сервера
+- name: Импорт ip zabbix сервера
+  become: true
+  ansible.builtin.shell: sed -i 's/Server=127.0.0.1/Server={{ ip_zabbix_server }}/g' /etc/zabbix/zabbix_agentd.conf
+
+# 7. Рестарт zabix агента и enable
+- name: "Restart zabbix-agent"
+  become: true
+  service:
+    name: zabbix-agent
+    state: restarted
+    enabled: yes

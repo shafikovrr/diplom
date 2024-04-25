@@ -3,9 +3,8 @@
   hosts: webservers
   gather_facts: yes
   vars_files:
-    - ./vars/ip_var_zabbix_server.yml
-    - ./vars/main.yml
+    - ip_var_zabbix_server.yml
   roles:
-  - include_role:
-    name: nginx
-    tasks_from: main
+    - include_role:
+      name: nginx
+      tasks_from: main
