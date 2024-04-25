@@ -1,4 +1,15 @@
 ---
+
+- name: Run the equivalent of "apt-get update" as a separate step
+  become: true
+  ansible.builtin.apt:
+    update_cache: yes
+
+#- name: Upgrade the OS (apt-get dist-upgrade)
+#  become: true
+#  ansible.builtin.apt:
+#    upgrade: dist
+
 # Import the repository signing key:
 
 - name: Install curl ca-certificates
@@ -21,11 +32,6 @@
   become: true
   ansible.builtin.apt:
     update_cache: yes
-
-#- name: Upgrade the OS (apt-get dist-upgrade)
-#  become: true
-#  ansible.builtin.apt:
-#    upgrade: dist
 
 #  Установка postgresql
 - name: Install postgresql (state=present is optional)

@@ -1,6 +1,16 @@
 ---
 # tasks file for nginx
 
+- name: Run the equivalent of "apt-get update" as a separate step
+  become: true
+  ansible.builtin.apt:
+    update_cache: yes
+
+#- name: Upgrade the OS (apt-get dist-upgrade)
+#  become: true
+#  ansible.builtin.apt:
+#    upgrade: dist
+
 # 1. Установить веб-сервер nginx на web_host_1 и web_host_2.
 # https://docs.ansible.com/ansible/latest/collections/ansible/builtin/apt_module.html
 
@@ -50,6 +60,11 @@
 
 # 6. Рестарт и enabled zabbix-agent
 
+- name: Импорт ip zabbix сервера
+  become: true
+  ansible.builtin.shell: sed -i 's/Server=127.0.0.1/Server={{ ip_zabbix_server }}/g' /etc/zabbix/zabbix_agentd.conf
+  tags: importip
+
 - name: "Restart zabbix-agent"
   become: true
   service:
@@ -70,17 +85,5 @@
   become: true
   service:
     name: filebeat
-    state: restarted
-    enabled: yes
-
-- name: Импорт ip zabbix сервера
-  become: true
-  ansible.builtin.shell: sed -i 's/Server=127.0.0.1/Server={{ ip_zabbix_server }}/g' /etc/zabbix/zabbix_agentd.conf
-  tags: importip
-  
-- name: "Restart zabbix-agent"
-  become: true
-  service:
-    name: zabbix-agent
     state: restarted
     enabled: yes

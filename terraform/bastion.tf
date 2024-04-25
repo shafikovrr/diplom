@@ -178,7 +178,8 @@ resource "yandex_compute_instance" "kibana" {
     subnet_id = yandex_vpc_subnet.bastion-external-segment.id
     nat       = true
     security_group_ids = [
-      yandex_vpc_security_group.internal-bastion-sg.id
+      yandex_vpc_security_group.internal-bastion-sg.id,
+      yandex_vpc_security_group.kibana-sg.id
     ]
   }
   metadata = {

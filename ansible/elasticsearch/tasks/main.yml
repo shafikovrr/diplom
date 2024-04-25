@@ -28,7 +28,7 @@
 
 # echo "deb [trusted=yes] https://mirror.yandex.ru/mirrors/elastic/7/ stable main" | sudo tee /etc/apt/sources.list.d/elastic-7.x.list
 
-- name: Добавление в source list mirror.yandex пользователя elasticsearch
+- name: Добавление в source list mirror.yandex elasticsearch
   become: true
   ansible.builtin.shell: echo "deb [trusted=yes] https://mirror.yandex.ru/mirrors/elastic/8/ stable main" | sudo tee /etc/apt/sources.list.d/elastic-8.x.list
 
@@ -82,13 +82,6 @@
     state: present
 
 # 6. Рестарт и enabled zabbix-agent
-
-- name: "Restart zabbix-agent"
-  become: true
-  service:
-    name: zabbix-agent
-    state: restarted
-    enabled: yes
 
 - name: Импорт ip zabbix сервера
   become: true

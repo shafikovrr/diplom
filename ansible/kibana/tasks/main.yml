@@ -1,5 +1,15 @@
 ---
 # tasks file for kibana
+- name: Run the equivalent of "apt-get update" as a separate step
+  become: true
+  ansible.builtin.apt:
+    update_cache: yes
+
+#- name: Upgrade the OS (apt-get dist-upgrade)
+#  become: true
+#  ansible.builtin.apt:
+#    upgrade: dist
+
 # 5. Установка zabbix-agent
 
 - name: "Install zabbix-agent"
@@ -18,5 +28,48 @@
   become: true
   service:
     name: zabbix-agent
+    state: restarted
+    enabled: yes
+
+#sudo apt install kibana
+#sudo systemctl daemon-reload
+#sudo systemctl enable kibana.service
+#systemctl start kibana.service
+
+#http://192.168.0.48:5601/app/dev_tools#/console
+#GET /_cluster/health?pretty
+
+#https://mirror.yandex.ru/mirrors/elastic/8/pool/main/k/kibana/kibana-8.9.2-amd64.deb
+
+# sudo apt update
+
+- name: Добавление в source list mirror.yandex elasticsearch
+  become: true
+  ansible.builtin.shell: echo "deb [trusted=yes] https://mirror.yandex.ru/mirrors/elastic/8/ stable main" | sudo tee /etc/apt/sources.list.d/elastic-8.x.list
+
+# sudo apt update && sudo apt install elasticsearch
+- name: Run the equivalent of "apt-get update" as a separate step
+  become: true
+  ansible.builtin.apt:
+    update_cache: yes
+
+#  Установка elasticsearch
+- name: Install kibana (state=present is optional)
+  become: true
+  ansible.builtin.apt:
+    name:
+      - kibana
+    state: present
+
+#sudo nano /etc/kibana/kibana.yml
+#server.host: "192.168.0.48"
+
+
+
+# 7. Рестарт kibana и enable
+- name: "Restart kibana"
+  become: true
+  service:
+    name: kibana
     state: restarted
     enabled: yes

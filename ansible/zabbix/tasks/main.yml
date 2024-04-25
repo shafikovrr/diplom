@@ -7,6 +7,11 @@
   ansible.builtin.apt:
     update_cache: yes
 
+#- name: Upgrade the OS (apt-get dist-upgrade)
+#  become: true
+#  ansible.builtin.apt:
+#    upgrade: dist
+
 - name: Install the zabbix-release_6.4-1 from a repo.zabbix.com
   become: true
   ansible.builtin.apt:

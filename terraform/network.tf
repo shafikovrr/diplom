@@ -151,8 +151,8 @@ resource "yandex_vpc_security_group" "elasticsearch-sg" {
   name       = "elasticsearch-sg"
   network_id = yandex_vpc_network.network.id
   ingress { #входящий на 9100 порт
-    protocol       = "TCP"
-    port           = 9100
+    protocol = "TCP"
+    port     = 9100
     v4_cidr_blocks = [
       "192.168.10.0/24",
       "192.168.11.0/24",
@@ -180,15 +180,35 @@ resource "yandex_vpc_security_group" "elasticsearch-sg" {
   }
 
   egress { #исходящий любой на любой хост
-    protocol  = "ANY"
-    from_port = 0
-    to_port   = 65535
+    protocol       = "ANY"
+    from_port      = 0
+    to_port        = 65535
     v4_cidr_blocks = ["0.0.0.0/0"]
   }
 }
 
 
+#kibana
+resource "yandex_vpc_security_group" "kibana-sg" {
+  name       = "kibana-sg"
+  network_id = yandex_vpc_network.network.id
+  ingress { #входящий с zabbix servera на хосты (zabbix-agent) в подсетях 10,11,12
+    protocol = "TCP"
+    port     = 10050
+    v4_cidr_blocks = [
+      "192.168.10.0/24",
+      "192.168.11.0/24",
+      "192.168.12.0/24"
+    ]
+  }
 
+  egress { #исходящий любой на любой хост
+    protocol       = "ANY"
+    from_port      = 0
+    to_port        = 65535
+    v4_cidr_blocks = ["0.0.0.0/0"]
+  }
+}
 
 # Резервирование ip адреса bastion
 #https://github.com/yandex-cloud/docs/blob/master/ru/compute/operations/vm-control/vm-attach-public-ip.md
