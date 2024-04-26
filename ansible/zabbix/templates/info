@@ -1,0 +1,3 @@
+/etc/zabbix/web/zabbix.conf.php - готовый файл с первоначальной настройкой после установки
+/etc/zabbix/zabbix_agentd.conf
+/etc/apache2/conf-enabled/zabbix.conf -        php_value data.timezone Asia/Yekaterinburg - добавлена строчка с тайм зоной

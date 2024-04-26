@@ -30,7 +30,7 @@
     dest: "/var/www/html/index.html"
     owner: root
     group: root
-    mode: "0644" # 0755
+    mode: "0644"
 
 # 3. Рестарт и enabled
 # https://docs.ansible.com/ansible/latest/collections/ansible/builtin/service_module.html
