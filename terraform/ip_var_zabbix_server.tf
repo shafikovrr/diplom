@@ -15,6 +15,8 @@ EOF
 resource "local_file" "ip_zabbix_server_kibana" {
   content  = <<EOF
 ip_zabbix_server: ${yandex_compute_instance.zabbix.network_interface.0.ip_address}
+ip_elasticsearch_server: ${yandex_compute_instance.elasticsearch.network_interface.0.ip_address}
+ip_all_server: 0.0.0.0
 EOF
   filename = "../ansible/kibana/vars/ip_var_zabbix_server.yml"
 }

@@ -24,7 +24,8 @@ output "internal_ip_address_web2" {
 
 output "internal_ip_address_elas" {
   value = yandex_compute_instance.elasticsearch.network_interface.0.ip_address
-} 
+}
+
 output "external_ip_address_zabb" {
   value = yandex_compute_instance.zabbix.network_interface.0.nat_ip_address
 }

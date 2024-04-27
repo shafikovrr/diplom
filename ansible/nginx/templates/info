@@ -1,0 +1,2 @@
+/etc/filebeat/filebeat.yml -rw------- 600  1 root root
+"  hosts: ["localhost:9200"]" - "  hosts: ["{{  }}:9200"]"

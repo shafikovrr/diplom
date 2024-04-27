@@ -106,32 +106,32 @@
 
 #2c8849da595ed1932b750410ea8e6f4e9fd0fc5a1daf8ff1ae41a24e73718423
 
-- name: Set API token
-  ansible.builtin.set_fact:
-    ansible_zabbix_auth_key: 2c8849da595ed1932b750410ea8e6f4e9fd0fc5a1daf8ff1ae41a24e73718423
-  tags: ah
+#- name: Set API token
+#  ansible.builtin.set_fact:
+#    ansible_zabbix_auth_key: 2c8849da595ed1932b750410ea8e6f4e9fd0fc5a1daf8ff1ae41a24e73718423
+#  tags: ah
 
-- name: Add host to Zabbix server
-  vars:
-    ansible_network_os: community.zabbix.zabbix
-    ansible_connection: httpapi
-    ansible_httpapi_port: 80
-    ansible_httpapi_use_ssl: false
-    ansible_zabbix_url_path: 192.168.10.25
-    ansible_user: Admin
-    ansible_httpapi_pass: zabbix
-  zabbix_host:
-    host_name: web_server_1
-    visible_name: web1
-    host_groups: Zabbix
-    link_templates: Zabbix
-    interfaces:
-      - type: 1
-        main: 1
-        useip: 1
-        ip: 192.168.11.21
-        dns: ""
-        port: 80
-    status: enabled
-    state: present
-  tags: ah
+#- name: Add host to Zabbix server
+#  vars:
+#    ansible_network_os: community.zabbix.zabbix
+#    ansible_connection: httpapi
+#    ansible_httpapi_port: 80
+#    ansible_httpapi_use_ssl: false
+#    ansible_zabbix_url_path: 192.168.10.25
+#    ansible_user: Admin
+#    ansible_httpapi_pass: zabbix
+#  zabbix_host:
+#    host_name: web_server_1
+#    visible_name: web1
+#    host_groups: Zabbix
+#    link_templates: Zabbix
+#    interfaces:
+#      - type: 1
+#        main: 1
+#        useip: 1
+#        ip: 192.168.11.21
+#        dns: ""
+#        port: 80
+#    status: enabled
+#    state: present
+#  tags: ah

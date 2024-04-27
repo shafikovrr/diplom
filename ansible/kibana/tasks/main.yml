@@ -63,7 +63,7 @@
   ansible.builtin.apt:
     update_cache: yes
 
-#  Установка elasticsearch
+#  Установка kibana
 - name: Install kibana (state=present is optional)
   become: true
   ansible.builtin.apt:
@@ -72,9 +72,18 @@
     state: present
 
 #sudo nano /etc/kibana/kibana.yml
-#server.host: "192.168.0.48"
+# #server.host: "localhost" на #server.host: "0.0.0.0"
+# #elasticsearch.hosts: ["http://localhost:9200"] на elasticsearch.hosts: ["http://{{ internal_ip_elasticsearch }}:9200"]
 
-
+- name: "Add new kibana.yml"
+  become: true
+  template:
+    src: "kibana.yml.j2"
+    dest: "/etc/kibana/kibana.yml"
+    owner: root
+    group: kibana
+    mode: "0660"
+  tags: copykibanayml
 
 # 7. Рестарт kibana и enable
 - name: "Restart kibana"
@@ -83,3 +92,5 @@
     name: kibana
     state: restarted
     enabled: yes
+  tags: restartkibana
+  

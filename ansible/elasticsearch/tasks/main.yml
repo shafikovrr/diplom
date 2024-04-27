@@ -50,7 +50,7 @@
 
 - name: xpack.security.enabled - false
   become: true
-  ansible.builtin.shell: sed -i 's/xpack.security.enabled:\true/xpack.security.enabled:\false/g' /etc/elasticsearch/elasticsearch.yml
+  ansible.builtin.shell: sed -i 's/xpack.security.enabled:\ true/xpack.security.enabled:\ false/g' /etc/elasticsearch/elasticsearch.yml
   tags: securityfalse
 
 # sudo systemctl daemon-reload
@@ -103,3 +103,12 @@
     name: zabbix-agent
     state: restarted
     enabled: yes
+
+# 7. Рестарт elasticsearch и enable
+- name: "Restart elasticsearch"
+  become: true
+  service:
+    name: elasticsearch.service
+    state: restarted
+    enabled: yes
+  tags: restartelastic

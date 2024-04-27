@@ -165,9 +165,11 @@ resource "yandex_vpc_security_group" "elasticsearch-sg" {
     v4_cidr_blocks = [
       "192.168.10.0/24",
       "192.168.11.0/24",
-      "192.168.12.0/24"
+      "192.168.12.0/24",
+      "0.0.0.0/0"
     ]
   }
+
 
   ingress { #входящий с zabbix servera на хосты (zabbix-agent) в подсетях 10,11,12
     protocol = "TCP"
@@ -200,6 +202,12 @@ resource "yandex_vpc_security_group" "kibana-sg" {
       "192.168.11.0/24",
       "192.168.12.0/24"
     ]
+  }
+
+  ingress { #входящий на 5601 порт
+    protocol = "TCP"
+    port     = 5601
+    v4_cidr_blocks = ["0.0.0.0/0"]
   }
 
   egress { #исходящий любой на любой хост
