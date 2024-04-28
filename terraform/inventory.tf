@@ -7,35 +7,35 @@ Host ${var.proxy_jump}
   Port ${var.ssh_port}
   IdentityFile ${var.ssh_bastion}
 
-Host web_server_1
+Host web_server_1.ru-central1.internal
   HostName ${yandex_compute_instance.web-host-1.network_interface.0.ip_address}
   User ${var.ssh_host_user}
   Port ${var.ssh_port}
   IdentityFile ${var.ssh_bastion}
   ProxyJump ${var.proxy_jump}
   
-Host web_server_2
+Host web_server_2.ru-central1.internal
   HostName ${yandex_compute_instance.web-host-2.network_interface.0.ip_address}
   User ${var.ssh_host_user}
   Port ${var.ssh_port}
   IdentityFile ${var.ssh_bastion}
   ProxyJump ${var.proxy_jump}
 
-Host zabbix
+Host zabbix.ru-central1.internal
   HostName ${yandex_compute_instance.zabbix.network_interface.0.ip_address}
   User ${var.ssh_host_user}
   Port ${var.ssh_port}
   IdentityFile ${var.ssh_bastion}
   ProxyJump ${var.proxy_jump}
 
-Host kibana
+Host kibana.ru-central1.internal
   HostName ${yandex_compute_instance.kibana.network_interface.0.ip_address}
   User ${var.ssh_host_user}
   Port ${var.ssh_port}
   IdentityFile ${var.ssh_bastion}
   ProxyJump ${var.proxy_jump}
 
-Host elasticsearch
+Host elasticsearch.ru-central1.internal
   HostName ${yandex_compute_instance.elasticsearch.network_interface.0.ip_address}
   User ${var.ssh_host_user}
   Port ${var.ssh_port}

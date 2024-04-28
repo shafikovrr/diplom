@@ -1,6 +1,8 @@
 resource "local_file" "ip_zabbix_server_nginx" {
   content  = <<EOF
 ip_zabbix_server: ${yandex_compute_instance.zabbix.network_interface.0.ip_address}
+ip_elasticsearch_server: ${yandex_compute_instance.elasticsearch.network_interface.0.ip_address}
+ip_kibana_server: ${yandex_compute_instance.kibana.network_interface.0.ip_address}
 EOF
   filename = "../ansible/nginx/vars/ip_var_zabbix_server.yml"
 }

@@ -1,0 +1,54 @@
+- name: "Install filebeat and congigure"
+  hosts: webservers
+  vars_files:
+    - ip_var_zabbix_server.yml
+
+  tasks:
+    - name: "Install the filebeat"
+      become: yes
+      ansible.builtin.apt:
+        deb: https://mirror.yandex.ru/mirrors/elastic/8/pool/main/f/filebeat/filebeat-8.9.2-amd64.deb
+
+    - name: "Add filebeat.yml config"
+      become: yes
+      template:
+        src: "filebeat.yml.j2"
+        dest: "/etc/filebeat/filebeat.yml"
+        owner: root
+        group: root
+        mode: "0600"
+      tags:
+        filebeatyamlcopy
+
+        #sudo filebeat modules enable nginx
+
+    - name: "Включение модуля nginx filebeat"
+      become: yes
+      ansible.builtin.shell: sudo filebeat modules enable nginx
+      tags: enable-module-nginx
+
+    - name: "Add nginx.yml config"
+      become: yes
+      template:
+        src: "nginx.yml.j2"
+        dest: "/etc/filebeat/modules.d/nginx.yml"
+        owner: root
+        group: root
+        mode: "0644"
+      tags:
+        filebeatyamlcopy
+
+    - name: "Set up assets"
+      become: true
+      ansible.builtin.shell: sudo filebeat setup
+      tags: set-up-assets
+
+        # 6. Рестарт и enabled filebeat
+
+    - name: "Restart filebeat"
+      become: true
+      service:
+        name: filebeat
+        state: restarted
+        enabled: yes
+      tags: restart-filebeat

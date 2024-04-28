@@ -1,7 +1,11 @@
-1. ansible-playbook ./nginx/nginx_install.yml
-
-4. ansible-playbook ./elasticsearch/elasticsearch_install.yml
-5. ansible-playbook ./kibana/kibana_install.yml
-zabbix:
-    - ansible-playbook ./postgresql/postgresql_install.yml
-    - ansible-playbook ./zabbix/zabbix_install.yml
+1) nginx
+        ansible-playbook ./nginx/nginx_install.yml
+2) elasticsearch
+        ansible-playbook ./elasticsearch/elasticsearch_install.yml
+3) kibana
+        ansible-playbook ./kibana/kibana_install.yml
+4) zabbix:
+        ansible-playbook ./postgresql/postgresql_install.yml
+        ansible-playbook ./zabbix/zabbix_install.yml
+5) filebeat
+        ansible-playbook ./nginx/filebeat_config.yml

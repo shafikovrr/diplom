@@ -1,2 +1,5 @@
-/etc/filebeat/filebeat.yml -rw------- 600  1 root root
-"  hosts: ["localhost:9200"]" - "  hosts: ["{{  }}:9200"]"
+#/etc/filebeat/filebeat.yml -rw------- 600  1 root root
+#"  hosts: ["localhost:9200"]" - "  hosts: ["{{  }}:9200"]"
+
+#/etc/filebeat/modules.d/nginx.yml
+#-rw-r--r-- (644) root root   874 Apr 27 18:44 nginx.yml

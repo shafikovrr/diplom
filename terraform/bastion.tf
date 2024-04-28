@@ -189,3 +189,32 @@ resource "yandex_compute_instance" "kibana" {
     preemptible = true
   }
 }
+
+#https://yandex.cloud/ru/docs/compute/operations/disk-control/create-snapshot#create
+#https://terraform-provider.yandexcloud.net/Resources/compute_snapshot_schedule
+
+resource "yandex_compute_snapshot_schedule" "default" {
+  name = "disk-snapshot"
+
+  schedule_policy {
+    expression = "@midnight"
+  }
+
+  snapshot_count = 7
+
+  snapshot_spec {
+    description = "daily-snapshot"
+    labels = {
+      snapshot-label = "my-snapshot-label-value"
+    }
+  }
+
+  disk_ids = [
+    yandex_compute_disk.bastion.id,
+    yandex_compute_disk.boot-disk-web-host-1.id,
+    yandex_compute_disk.boot-disk-web-host-2.id,
+    yandex_compute_disk.elasticsearch.id,
+    yandex_compute_disk.zabbix.id,
+    yandex_compute_disk.kibana.id
+  ]
+}

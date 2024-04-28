@@ -1,3 +1,0 @@
-ip_zabbix_server: 192.168.10.16
-ip_elasticsearch_server: 192.168.11.3
-ip_all_server: 0.0.0.0

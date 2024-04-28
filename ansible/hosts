@@ -1,15 +1,16 @@
 [bastion]
-bastion-host
+bastion.ru-central1.internal
 
 [webservers]
-web_server_1
-web_server_2
+web_server_1.ru-central1.internal
+web_server_2.ru-central1.internal
+
 
 [elasticsearch]
-elasticsearch
+elasticsearch.ru-central1.internal
 
 [kibana]
-kibana
+kibana.ru-central1.internal
 
 [zabbix]
-zabbix
+zabbix.ru-central1.internal
