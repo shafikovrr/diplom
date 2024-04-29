@@ -57,7 +57,7 @@
 Протестируйте сайт
 `curl -v <публичный IP балансера>:80` 
 
-![curl-alb.png](img/curl-alb.png.png)
+![curl-alb.png](img/curl-alb.png)
 
 Порядок запуска плейбуков и вывод результатов их работы
 
