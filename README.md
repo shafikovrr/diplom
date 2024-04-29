@@ -57,6 +57,22 @@
 Протестируйте сайт
 `curl -v <публичный IP балансера>:80` 
 
+![curl-alb.png](img/curl-alb.png.png)
+
+Порядок запуска плейбуков и вывод результатов их работы
+
+![1-ansible-nginx.png](img/1-ansible-nginx.png)
+
+![2-ansible-elasticsearch.png](img/2-ansible-elasticsearch.png)
+
+![3-ansible-kibana.png](img/3-ansible-kibana.png)
+
+![4-ansible-postgresql.png](img/4-ansible-postgresql.png)
+
+![5-ansible-zabbix.png](img/5-ansible-zabbix.png)
+
+![6-ansible-filebeat.png](img/6-ansible-filebeat.png)
+
 ### Мониторинг
 Создайте ВМ, разверните на ней Zabbix. На каждую ВМ установите Zabbix Agent, настройте агенты на отправление метрик в Zabbix. 
 
