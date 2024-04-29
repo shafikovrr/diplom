@@ -3,7 +3,7 @@
 ##############################################
 
 output "external_ip_address_bast" {
-  value = yandex_vpc_address.addr.external_ipv4_address.0.address
+  value = yandex_compute_instance.bastion.network_interface.0.nat_ip_address
 }
 
 output "internal_ip_address_bast" {

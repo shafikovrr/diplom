@@ -3,7 +3,7 @@
 resource "yandex_compute_instance" "bastion" {
   name        = "bastion-host"
   description = "host bastion"
-  hostname    = "bastion-host"
+  hostname    = var.bastion_host_name
   zone        = var.zone_d
   platform_id = var.platform
   resources {
@@ -17,8 +17,6 @@ resource "yandex_compute_instance" "bastion" {
   network_interface {
     subnet_id      = yandex_vpc_subnet.bastion-external-segment.id
     nat            = true
-    nat_ip_address = yandex_vpc_address.addr.external_ipv4_address[0].address
-    ip_address     = "192.168.10.254"
     security_group_ids = [
       yandex_vpc_security_group.secure-bastion-sg.id,
       yandex_vpc_security_group.internal-bastion-sg.id
@@ -36,7 +34,7 @@ resource "yandex_compute_instance" "bastion" {
 resource "yandex_compute_instance" "web-host-1" {
   name        = "web-host-1"
   description = "веб-сервер 1"
-  hostname    = "web-host-1"
+  hostname    = var.web1_host_name
   zone        = var.zone_a
   platform_id = var.platform
   resources {
@@ -67,7 +65,7 @@ resource "yandex_compute_instance" "web-host-1" {
 resource "yandex_compute_instance" "web-host-2" {
   name        = "web-host-2"
   description = "веб-сервер 2"
-  hostname    = "web-host-2"
+  hostname    = var.web2_host_name
   zone        = var.zone_b
   platform_id = var.platform
   resources {
@@ -99,7 +97,7 @@ resource "yandex_compute_instance" "web-host-2" {
 resource "yandex_compute_instance" "elasticsearch" {
   name        = "elasticsearch"
   description = "host elasticsearch"
-  hostname    = "elasticsearch"
+  hostname    = var.elasticsearch_host_name
   zone        = var.zone_a
   platform_id = var.platform
   resources {
@@ -131,7 +129,7 @@ resource "yandex_compute_instance" "elasticsearch" {
 resource "yandex_compute_instance" "zabbix" {
   name        = "zabbix"
   description = "host zabbix"
-  hostname    = "zabbix"
+  hostname    = var.zabbix_host_name
   zone        = var.zone_d
   platform_id = var.platform
   resources {
@@ -163,7 +161,7 @@ resource "yandex_compute_instance" "zabbix" {
 resource "yandex_compute_instance" "kibana" {
   name        = "kibana"
   description = "host kibanah"
-  hostname    = "kibana"
+  hostname    = var.kibana_host_name
   zone        = var.zone_d
   platform_id = var.platform
   resources {

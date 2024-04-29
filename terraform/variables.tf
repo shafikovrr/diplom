@@ -53,10 +53,6 @@ variable "ssh_bastion" {
   type = string
 }
 
-variable "proxy_jump" {
-  type = string
-}
-
 variable "ssh_port" {
   type = string
 }
@@ -65,8 +61,26 @@ variable "http_port" {
   type = string
 }
 
-#variable "service_account_key_file" {
-#  description = "Service account key file"
-#  type        = string
-#  default     = "/home/adrin/.ssh/authorized_key.json"
-#}
+variable "bastion_host_name" {
+  type = string
+}
+
+variable "web1_host_name" {
+  type = string
+}
+
+variable "web2_host_name" {
+  type = string
+}
+
+variable "kibana_host_name" {
+  type = string
+}
+
+variable "zabbix_host_name" {
+  type = string
+}
+
+variable "elasticsearch_host_name" {
+  type = string
+}

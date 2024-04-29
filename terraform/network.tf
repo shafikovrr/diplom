@@ -48,7 +48,7 @@ resource "yandex_vpc_route_table" "rt" {
   }
 }
 
-# Группа безопасности бастионного хоста (вход только по ssh, выход любой)
+# Группа безопасности bastion хоста (вход только по ssh, выход любой)
 resource "yandex_vpc_security_group" "secure-bastion-sg" {
   name       = "secure-bastion-sg"
   network_id = yandex_vpc_network.network.id
@@ -205,8 +205,8 @@ resource "yandex_vpc_security_group" "kibana-sg" {
   }
 
   ingress { #входящий на 5601 порт
-    protocol = "TCP"
-    port     = 5601
+    protocol       = "TCP"
+    port           = 5601
     v4_cidr_blocks = ["0.0.0.0/0"]
   }
 
@@ -217,6 +217,35 @@ resource "yandex_vpc_security_group" "kibana-sg" {
     v4_cidr_blocks = ["0.0.0.0/0"]
   }
 }
+
+#https://yandex.cloud/ru/docs/application-load-balancer/concepts/application-load-balancer#security-groups
+#https://yandex.cloud/en/docs/vpc/concepts/security-groups
+resource "yandex_vpc_security_group" "alb-sg" {
+  name       = "alb-sg"
+  network_id = yandex_vpc_network.network.id
+  ingress { #входящий
+    protocol       = "TCP"
+    port           = var.http_port
+    v4_cidr_blocks = ["0.0.0.0/0"]
+  }
+  ingress { #входящий
+    protocol          = "TCP"
+    port              = 30080
+    predefined_target = "loadbalancer_healthchecks"
+  }
+  egress {
+    protocol  = "TCP"
+    from_port = 0
+    to_port   = 65535
+    v4_cidr_blocks = [
+      "192.168.10.0/24",
+      "192.168.11.0/24",
+      "192.168.12.0/24"
+    ]
+  }
+}
+
+
 
 # Резервирование ip адреса bastion
 #https://github.com/yandex-cloud/docs/blob/master/ru/compute/operations/vm-control/vm-attach-public-ip.md
@@ -294,8 +323,9 @@ resource "yandex_alb_virtual_host" "virtual-host" {
 
 # load-balancer
 resource "yandex_alb_load_balancer" "web-hosts-balancer" {
-  name       = "web-hosts-balancer"
-  network_id = yandex_vpc_network.network.id
+  name               = "web-hosts-balancer"
+  network_id         = yandex_vpc_network.network.id
+  security_group_ids = [yandex_vpc_security_group.alb-sg.id]
 
   allocation_policy {
     location {
