@@ -15,8 +15,8 @@ resource "yandex_compute_instance" "bastion" {
     disk_id = yandex_compute_disk.bastion.id
   }
   network_interface {
-    subnet_id      = yandex_vpc_subnet.bastion-external-segment.id
-    nat            = true
+    subnet_id = yandex_vpc_subnet.bastion-external-segment.id
+    nat       = true
     security_group_ids = [
       yandex_vpc_security_group.secure-bastion-sg.id,
       yandex_vpc_security_group.internal-bastion-sg.id
@@ -26,7 +26,7 @@ resource "yandex_compute_instance" "bastion" {
     user-data = "${file("./bastion.yml")}"
   }
   scheduling_policy {
-    preemptible = true
+    preemptible = false
   }
 }
 
@@ -57,7 +57,7 @@ resource "yandex_compute_instance" "web-host-1" {
     user-data = "${file("./meta.yml")}"
   }
   scheduling_policy {
-    preemptible = true
+    preemptible = false
   }
 }
 
@@ -88,7 +88,7 @@ resource "yandex_compute_instance" "web-host-2" {
     user-data = "${file("./meta.yml")}"
   }
   scheduling_policy {
-    preemptible = true
+    preemptible = false
   }
 }
 
@@ -101,9 +101,9 @@ resource "yandex_compute_instance" "elasticsearch" {
   zone        = var.zone_a
   platform_id = var.platform
   resources {
-    cores         = 2
+    cores         = 4
     core_fraction = 20
-    memory        = 2
+    memory        = 4
   }
   boot_disk {
     disk_id = yandex_compute_disk.elasticsearch.id
@@ -120,7 +120,7 @@ resource "yandex_compute_instance" "elasticsearch" {
     user-data = "${file("./meta.yml")}"
   }
   scheduling_policy {
-    preemptible = true
+    preemptible = false
   }
 }
 
@@ -152,7 +152,7 @@ resource "yandex_compute_instance" "zabbix" {
     user-data = "${file("./meta.yml")}"
   }
   scheduling_policy {
-    preemptible = true
+    preemptible = false
   }
 }
 
@@ -184,7 +184,7 @@ resource "yandex_compute_instance" "kibana" {
     user-data = "${file("./meta.yml")}"
   }
   scheduling_policy {
-    preemptible = true
+    preemptible = false
   }
 }
 
