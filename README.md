@@ -99,7 +99,7 @@ Cоздайте ВМ, разверните на ней Elasticsearch. Устан
 Настроил ВМ с публичным адресом, в которой будет открыт только один порт — ssh [bastion host]( https://cloud.yandex.ru/docs/tutorials/routing/bastion). Ansible  и terraform установлены на локальной ВМ.
 
 ### Резервное копирование
-Создайте snapshot дисков всех ВМ. Ограничьте время жизни snaphot в неделю. Сами snaphot настройте на ежедневное копирование.
+Создал snapshot дисков всех ВМ. Ограничил время жизни snaphot - 7 дней. Сами snaphot создаются ежедневно (файл bastion.tf - 194 строка).
 
 ![snapshot.png](img/snapshot.png)
 
